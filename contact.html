@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact – Rabboni Restaurant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .contact-layout { display: grid; grid-template-columns: 1fr 420px; gap: 40px; align-items: start; }
+    .contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 32px; }
+    .contact-item { display: flex; gap: 18px; align-items: flex-start; padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .contact-item:last-child { border-bottom: none; }
+    .contact-icon-box { width: 52px; height: 52px; background: rgba(212,168,67,.1); border: 1px solid var(--border); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+    .contact-item-label { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+    .contact-item-value { font-size: .95rem; font-weight: 500; margin-bottom: 3px; }
+    .contact-item-sub { font-size: .82rem; color: var(--text-muted); line-height: 1.6; }
+    .contact-item a { color: var(--text); transition: var(--transition); }
+    .contact-item a:hover { color: var(--gold); }
+    /* Phone cards */
+    .phone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .phone-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; text-align: center; transition: var(--transition); }
+    .phone-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .phone-card a { font-weight: 600; font-size: .88rem; color: var(--text); }
+    .phone-card .phone-label { font-size: .72rem; color: var(--text-muted); margin-top: 4px; }
+    /* Map */
+    .map-container { border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--border); background: var(--surface-2); height: 340px; display: flex; align-items: center; justify-content: center; position: relative; }
+    .map-placeholder { text-align: center; }
+    .map-placeholder .map-icon { font-size: 3rem; margin-bottom: 12px; }
+    .map-placeholder p { color: var(--text-muted); font-size: .9rem; margin-bottom: 16px; }
+    /* Social */
+    .social-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .social-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; display: flex; align-items: center; gap: 14px; transition: var(--transition); text-decoration: none; color: var(--text); }
+    .social-card:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: var(--shadow-gold); }
+    .social-card .s-icon { font-size: 1.8rem; }
+    .social-card .s-name { font-weight: 600; font-size: .9rem; }
+    .social-card .s-handle { font-size: .78rem; color: var(--text-muted); }
+    /* Hours grid */
+    .hours-full-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .hours-full-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-radius: 8px; font-size: .85rem; }
+    .hours-full-row:nth-child(odd) { background: var(--surface-2); }
+    .hours-full-row .day { color: var(--text-muted); }
+    .hours-full-row .time { font-weight: 500; color: var(--text); }
+    .open-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(72,166,95,.12); border: 1px solid rgba(72,166,95,.25); border-radius: 20px; font-size: .75rem; font-weight: 600; color: #72C48F; }
+    .open-dot { width: 6px; height: 6px; background: #72C48F; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+    @media(max-width:900px){ .contact-layout { grid-template-columns: 1fr; } .phone-grid { grid-template-columns: 1fr; } .social-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="nav-logo-icon">🍽️</div><div class="nav-logo-text">Rabboni <span>Restaurant</span></div></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+      <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+      <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+      <a href="reviews.html">Reviews</a><a href="contact.html" class="active">Contact</a>
+      <a href="reservations.html" class="nav-cta">Book Table</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+  <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+  <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+  <a href="reviews.html">Reviews</a><a href="contact.html" class="active">Contact</a><a href="loyalty.html">Loyalty</a>
+</div>
+
+<div class="page-content">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-breadcrumb"><a href="index.html">Home</a><span class="sep">›</span><span>Contact</span></div>
+      <div class="section-label">Get In Touch</div>
+      <h1 class="section-title">Contact <span>Us</span></h1>
+      <p style="color:var(--text-muted);max-width:600px;margin-top:12px">We're always happy to hear from you. Reach us by phone, visit us, or connect on social media.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="contact-layout">
+        <!-- Left column -->
+        <div style="display:flex;flex-direction:column;gap:24px">
+
+          <!-- Contact details card -->
+          <div class="contact-card animate-in">
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:4px">Contact <span style="color:var(--gold)">Details</span></h3>
+            <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:8px">Multiple ways to reach us</p>
+
+            <div class="contact-item">
+              <div class="contact-icon-box">📍</div>
+              <div>
+                <div class="contact-item-label">Location</div>
+                <div class="contact-item-value">Opposite Techiman Community Centre</div>
+                <div class="contact-item-sub">First Floor, Opportunity International Bank Building<br>Techiman, Bono East Region, Ghana</div>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon-box">📞</div>
+              <div style="width:100%">
+                <div class="contact-item-label">Phone Numbers</div>
+                <div class="phone-grid" style="margin-top:8px">
+                  <div class="phone-card">
+                    <div style="font-size:1.1rem;margin-bottom:4px">📱</div>
+                    <a href="tel:+233591447201">059 144 7201</a>
+                    <div class="phone-label">Main Line</div>
+                  </div>
+                  <div class="phone-card">
+                    <div style="font-size:1.1rem;margin-bottom:4px">📱</div>
+                    <a href="tel:+233242880601">024 288 0601</a>
+                    <div class="phone-label">Line 2</div>
+                  </div>
+                  <div class="phone-card">
+                    <div style="font-size:1.1rem;margin-bottom:4px">📱</div>
+                    <a href="tel:+233206484613">020 648 4613</a>
+                    <div class="phone-label">Line 3</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon-box">🕐</div>
+              <div>
+                <div class="contact-item-label">Opening Hours</div>
+                <div style="display:flex;align-items:center;gap:10px;margin-top:6px;margin-bottom:10px">
+                  <div class="open-badge"><span class="open-dot"></span> Open Now</div>
+                </div>
+                <div class="contact-item-sub">Monday – Sunday: <strong style="color:var(--text)">6:00 AM – 9:00 PM</strong><br>We are open every day of the week.</div>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon-box">🚚</div>
+              <div>
+                <div class="contact-item-label">Delivery</div>
+                <div class="contact-item-value">Free Delivery on Selected Packages</div>
+                <div class="contact-item-sub">Standard delivery: GHS 10 within Techiman<br><a href="order.html" style="color:var(--gold)">Order online →</a></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Map -->
+          <div class="animate-in">
+            <div class="map-container">
+              <!-- Real embed: replace src with your Google Maps embed URL -->
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0!2d-1.9283!3d7.5897!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMzUnMjMuMCJOIDHCsDU1JzQyLjAiVw!5e0!3m2!1sen!2sgh!4v1620000000000!5m2!1sen!2sgh"
+                width="100%" height="340" style="border:0;display:block" allowfullscreen="" loading="lazy"
+                title="Rabboni Restaurant Location"
+                onerror="this.style.display='none';document.getElementById('mapFallback').style.display='flex'">
+              </iframe>
+              <div id="mapFallback" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:var(--surface-2)">
+                <div style="font-size:3rem">📍</div>
+                <p style="color:var(--text-muted);font-size:.9rem;text-align:center;max-width:260px">Opposite Techiman Community Centre, First Floor, OIB Building, Techiman</p>
+                <a href="https://maps.google.com/?q=Techiman+Community+Centre+Ghana" target="_blank" class="btn btn-outline btn-sm">Open in Maps →</a>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px">
+              <a href="https://maps.google.com/?q=Techiman+Community+Centre+Ghana" target="_blank" class="btn btn-ghost btn-sm">🗺️ Open in Google Maps →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div style="display:flex;flex-direction:column;gap:24px">
+
+          <!-- Quick contact form -->
+          <div class="contact-card animate-in">
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:6px">Send a <span style="color:var(--gold)">Message</span></h3>
+            <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:24px">Have a question? We'll get back to you promptly.</p>
+            <div class="form-group">
+              <label class="form-label">Name</label>
+              <input class="form-control" id="msg-name" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone / WhatsApp</label>
+              <input class="form-control" id="msg-phone" placeholder="05X XXX XXXX" type="tel">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subject</label>
+              <select class="form-control" id="msg-subject">
+                <option>General Enquiry</option>
+                <option>Table Reservation</option>
+                <option>Private Event Booking</option>
+                <option>Feedback / Complaint</option>
+                <option>Catering Enquiry</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Message</label>
+              <textarea class="form-control" id="msg-body" rows="4" placeholder="Your message..."></textarea>
+            </div>
+            <button class="btn btn-primary w-full" style="width:100%;justify-content:center" onclick="sendMessage()">📨 Send Message</button>
+          </div>
+
+          <!-- Social Media -->
+          <div class="contact-card animate-in">
+            <h4 style="font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:16px">Follow <span style="color:var(--gold)">Us</span></h4>
+            <div class="social-grid">
+              <a href="#" class="social-card">
+                <span class="s-icon">📘</span>
+                <div><div class="s-name">Facebook</div><div class="s-handle">@RabboniRestaurant</div></div>
+              </a>
+              <a href="#" class="social-card">
+                <span class="s-icon">📸</span>
+                <div><div class="s-name">Instagram</div><div class="s-handle">@rabboni_gh</div></div>
+              </a>
+              <a href="#" class="social-card">
+                <span class="s-icon">🎵</span>
+                <div><div class="s-name">TikTok</div><div class="s-handle">@rabbonirestaurant</div></div>
+              </a>
+              <a href="https://wa.me/233591447201" class="social-card">
+                <span class="s-icon">💬</span>
+                <div><div class="s-name">WhatsApp</div><div class="s-handle">059 144 7201</div></div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Full Hours -->
+          <div class="contact-card animate-in">
+            <h4 style="font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:16px">Opening <span style="color:var(--gold)">Hours</span></h4>
+            <div class="hours-full-grid">
+              <div class="hours-full-row"><span class="day">Monday</span><span class="time">6AM – 9PM</span></div>
+              <div class="hours-full-row"><span class="day">Tuesday</span><span class="time">6AM – 9PM</span></div>
+              <div class="hours-full-row"><span class="day">Wednesday</span><span class="time">6AM – 9PM</span></div>
+              <div class="hours-full-row"><span class="day">Thursday</span><span class="time">6AM – 9PM</span></div>
+              <div class="hours-full-row"><span class="day">Friday</span><span class="time">6AM – 9PM</span></div>
+              <div class="hours-full-row"><span class="day">Saturday</span><span class="time">6AM – 9PM</span></div>
+              <div class="hours-full-row"><span class="day" style="color:var(--gold)">Sunday</span><span class="time">6AM – 9PM</span></div>
+            </div>
+            <p style="margin-top:14px;font-size:.8rem;color:var(--text-muted)">🎵 Live Music on selected evenings — check our <a href="promotions.html" style="color:var(--gold)">Promotions page</a> for event dates.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="kente-divider"></div>
+  <div class="footer-top"><div class="container"><div class="footer-grid">
+    <div><div class="footer-brand-name">Rabboni <span>Restaurant</span></div><p class="footer-tagline">Exceptional Dining Experience in Techiman</p>
+      <div class="footer-social"><a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">🎵</a><a href="https://wa.me/233591447201" class="social-btn">💬</a></div></div>
+    <div><div class="footer-heading">Quick Links</div><div class="footer-links"><a href="index.html">→ Home</a><a href="menu.html">→ Menu</a><a href="reservations.html">→ Reservations</a><a href="contact.html">→ Contact</a></div></div>
+    <div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+233591447201">📞 059 144 7201</a><a href="tel:+233242880601">📞 024 288 0601</a><a href="tel:+233206484613">📞 020 648 4613</a></div></div>
+    <div><div class="footer-heading">Hours</div><div class="footer-hours"><div class="hours-row"><span class="day">Mon – Sun</span><span class="time">6AM – 9PM</span></div></div></div>
+  </div></div></div>
+  <div class="footer-bottom"><div class="container"><div class="footer-bottom-inner"><span>© 2026 Rabboni Restaurant.</span><span>Techiman, Ghana 🇬🇭</span></div></div></div>
+</footer>
+
+<div class="floating-btns">
+  <a href="https://wa.me/233591447201" target="_blank" class="float-btn float-wa" data-label="WhatsApp Order">💬</a>
+  <a href="tel:+233591447201" class="float-btn float-call" data-label="Call Now">📞</a>
+  <a href="reservations.html" class="float-btn float-reserve" data-label="Book Table">📅</a>
+</div>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script>
+  async function sendMessage() {
+    const name = document.getElementById('msg-name').value.trim();
+    const phone = document.getElementById('msg-phone').value.trim();
+    const body = document.getElementById('msg-body').value.trim();
+    const subject = document.getElementById('msg-subject').value;
+    if (!name || !phone || !body) { showToast('Please fill in all required fields.', 'error'); return; }
+    const btn = document.querySelector('button[onclick="sendMessage()"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    try {
+      await API.sendMessage({ name, phone, subject, message: body });
+      showToast("Message sent! We'll get back to you soon.", 'success');
+      document.getElementById('msg-name').value = '';
+      document.getElementById('msg-phone').value = '';
+      document.getElementById('msg-body').value = '';
+    } catch (err) {
+      showToast(err.message || 'Could not send message. Please try again.', 'error');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = '📨 Send Message'; }
+    }
+  }
+  // Show map fallback if iframe fails to load
+  setTimeout(() => {
+    const iframe = document.querySelector('.map-container iframe');
+    if (iframe) {
+      try {
+        if (!iframe.contentDocument) {
+          document.getElementById('mapFallback').style.display = 'flex';
+        }
+      } catch(e) { /* cross-origin – iframe loaded, don't show fallback */ }
+    }
+  }, 3000);
+</script>
+</body>
+</html>

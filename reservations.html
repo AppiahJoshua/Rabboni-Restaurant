@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservations – Rabboni Restaurant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .res-layout { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
+    .res-form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 40px; }
+    .res-info-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 28px; position: sticky; top: 90px; }
+    .res-type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+    .res-type { background: var(--surface-2); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px 12px; text-align: center; cursor: pointer; transition: var(--transition); }
+    .res-type:hover { border-color: var(--border-strong); }
+    .res-type.selected { border-color: var(--gold); background: rgba(212,168,67,.08); }
+    .res-type .icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .res-type .label { font-size: .8rem; font-weight: 600; }
+    .guest-selector { display: flex; align-items: center; gap: 16px; }
+    .guest-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface-2); border: 1.5px solid var(--border); color: var(--text); font-size: 1.3rem; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; }
+    .guest-btn:hover { background: var(--primary); border-color: var(--primary); }
+    .guest-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); min-width: 40px; text-align: center; }
+    .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
+    .time-chip { padding: 10px 8px; border-radius: var(--radius); background: var(--surface-2); border: 1.5px solid var(--border); text-align: center; font-size: .8rem; font-weight: 600; cursor: pointer; transition: var(--transition); }
+    .time-chip:hover { border-color: var(--border-strong); }
+    .time-chip.selected { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .time-chip.unavailable { opacity: .35; pointer-events: none; }
+    .confirm-modal-content { text-align: center; padding: 20px 0; }
+    .confirm-icon { font-size: 3rem; margin-bottom: 16px; animation: float 3s ease-in-out infinite; }
+    .booking-ref { display: inline-block; background: rgba(212,168,67,.1); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 20px; font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.1rem; margin: 12px 0 20px; }
+    .info-item-card { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .info-item-card:last-child { border-bottom: none; }
+    .info-icon-box { width: 40px; height: 40px; background: rgba(212,168,67,.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    @media(max-width:900px){ .res-layout { grid-template-columns: 1fr; } .res-info-card { position: static; } }
+    @media(max-width:480px){ .res-type-grid { grid-template-columns: 1fr; } .time-grid { grid-template-columns: repeat(3,1fr); } }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="nav-logo-icon">🍽️</div><div class="nav-logo-text">Rabboni <span>Restaurant</span></div></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+      <a href="order.html">Order Online</a><a href="reservations.html" class="active">Reservations</a>
+      <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+      <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a>
+      <a href="reservations.html" class="nav-cta">Book Table</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+  <a href="order.html">Order Online</a><a href="reservations.html" class="active">Reservations</a>
+  <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+  <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a><a href="loyalty.html">Loyalty</a>
+</div>
+
+<div class="page-content">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-breadcrumb"><a href="index.html">Home</a><span class="sep">›</span><span>Reservations</span></div>
+      <div class="section-label">Table Booking</div>
+      <h1 class="section-title">Reserve Your <span>Table</span></h1>
+      <p style="color:var(--text-muted);max-width:600px;margin-top:12px">Book a table for any occasion — from casual dining to special celebrations. We'll make it memorable.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="res-layout">
+        <!-- Form -->
+        <div class="res-form-card animate-in">
+          <h3 style="font-family:'Playfair Display',serif;margin-bottom:6px">Make a Reservation</h3>
+          <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:28px">Fill in your details below and we'll confirm your booking.</p>
+
+          <div class="form-label mb-8" style="margin-bottom:12px">Occasion Type</div>
+          <div class="res-type-grid">
+            <div class="res-type selected" data-type="dinner"><div class="icon">🍽️</div><div class="label">Dinner</div></div>
+            <div class="res-type" data-type="lunch"><div class="icon">☀️</div><div class="label">Lunch</div></div>
+            <div class="res-type" data-type="breakfast"><div class="icon">🌅</div><div class="label">Breakfast</div></div>
+            <div class="res-type" data-type="birthday"><div class="icon">🎂</div><div class="label">Birthday</div></div>
+            <div class="res-type" data-type="couple"><div class="icon">💑</div><div class="label">Date Night</div></div>
+            <div class="res-type" data-type="event"><div class="icon">🎉</div><div class="label">Private Event</div></div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input class="form-control" id="res-name" placeholder="Your full name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input class="form-control" id="res-phone" placeholder="05X XXX XXXX" type="tel">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input class="form-control" id="res-date" type="date">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Preferred Time</label>
+            <div class="time-grid" id="timeGrid">
+              <div class="time-chip" data-time="06:00">6:00 AM</div>
+              <div class="time-chip" data-time="07:00">7:00 AM</div>
+              <div class="time-chip" data-time="08:00">8:00 AM</div>
+              <div class="time-chip" data-time="09:00">9:00 AM</div>
+              <div class="time-chip" data-time="10:00">10:00 AM</div>
+              <div class="time-chip" data-time="11:00">11:00 AM</div>
+              <div class="time-chip" data-time="12:00">12:00 PM</div>
+              <div class="time-chip" data-time="13:00">1:00 PM</div>
+              <div class="time-chip" data-time="14:00">2:00 PM</div>
+              <div class="time-chip" data-time="15:00">3:00 PM</div>
+              <div class="time-chip" data-time="16:00">4:00 PM</div>
+              <div class="time-chip" data-time="17:00">5:00 PM</div>
+              <div class="time-chip selected" data-time="18:00">6:00 PM</div>
+              <div class="time-chip" data-time="19:00">7:00 PM</div>
+              <div class="time-chip" data-time="20:00">8:00 PM</div>
+              <div class="time-chip" data-time="21:00">9:00 PM</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Number of Guests</label>
+            <div class="guest-selector">
+              <button class="guest-btn" id="guestMinus">−</button>
+              <span class="guest-num" id="guestNum">2</span>
+              <button class="guest-btn" id="guestPlus">+</button>
+              <span style="font-size:.85rem;color:var(--text-muted)">guests</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Special Requests</label>
+            <textarea class="form-control" id="res-notes" rows="3" placeholder="Dietary requirements, special setup, anniversary message..."></textarea>
+          </div>
+
+          <button class="btn btn-primary w-full btn-lg" onclick="submitReservation()" style="width:100%;justify-content:center">📅 Confirm Reservation</button>
+        </div>
+
+        <!-- Info sidebar -->
+        <div>
+          <div class="res-info-card animate-in">
+            <h4 style="font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:20px">Restaurant Info</h4>
+            <div class="info-item-card">
+              <div class="info-icon-box">📍</div>
+              <div><div style="font-weight:600;font-size:.9rem;margin-bottom:4px">Location</div><div style="color:var(--text-muted);font-size:.82rem;line-height:1.6">Opposite Techiman Community Centre<br>First Floor, OIB Building<br>Techiman, Bono East Region</div></div>
+            </div>
+            <div class="info-item-card">
+              <div class="info-icon-box">🕐</div>
+              <div><div style="font-weight:600;font-size:.9rem;margin-bottom:4px">Opening Hours</div><div style="color:var(--text-muted);font-size:.82rem">Monday – Sunday<br>6:00 AM – 9:00 PM</div></div>
+            </div>
+            <div class="info-item-card">
+              <div class="info-icon-box">📞</div>
+              <div><div style="font-weight:600;font-size:.9rem;margin-bottom:4px">Phone</div><div style="color:var(--text-muted);font-size:.82rem">059 144 7201<br>024 288 0601<br>020 648 4613</div></div>
+            </div>
+            <div class="info-item-card">
+              <div class="info-icon-box">ℹ️</div>
+              <div><div style="font-weight:600;font-size:.9rem;margin-bottom:4px">Booking Policy</div><div style="color:var(--text-muted);font-size:.82rem">Reservations are held for 15 minutes. Please call if you're running late.</div></div>
+            </div>
+          </div>
+
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px;margin-top:20px" class="animate-in">
+            <h4 style="font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:16px">🎉 Special Packages</h4>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <a href="promotions.html" style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition)">
+                <span style="font-size:1.4rem">💑</span>
+                <div><div style="font-size:.88rem;font-weight:600">Couple's Package</div><div style="font-size:.76rem;color:var(--text-muted)">Candlelight for two</div></div>
+              </a>
+              <a href="promotions.html" style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition)">
+                <span style="font-size:1.4rem">🎂</span>
+                <div><div style="font-size:.88rem;font-weight:600">Birthday Package</div><div style="font-size:.76rem;color:var(--text-muted)">Make it unforgettable</div></div>
+              </a>
+              <a href="promotions.html" style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition)">
+                <span style="font-size:1.4rem">👨‍👩‍👧</span>
+                <div><div style="font-size:.88rem;font-weight:600">Family Package</div><div style="font-size:.76xx;color:var(--text-muted)">For the whole family</div></div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal-overlay" id="resModal">
+  <div class="modal">
+    <div class="confirm-modal-content">
+      <div class="confirm-icon">📅</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:8px">Reservation Confirmed!</h3>
+      <p style="color:var(--text-muted);margin-bottom:4px">Thank you, <strong id="conf-name">Guest</strong>!</p>
+      <div class="booking-ref" id="conf-ref">#RES-0000</div>
+      <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:left;margin-bottom:24px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:.85rem">
+          <div><div style="color:var(--text-muted)">Date</div><strong id="conf-date">—</strong></div>
+          <div><div style="color:var(--text-muted)">Time</div><strong id="conf-time">—</strong></div>
+          <div><div style="color:var(--text-muted)">Guests</div><strong id="conf-guests">—</strong></div>
+          <div><div style="color:var(--text-muted)">Occasion</div><strong id="conf-type">—</strong></div>
+        </div>
+      </div>
+      <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:24px">We'll call you on <strong id="conf-phone">your number</strong> to confirm. See you soon!</p>
+      <div style="display:flex;gap:12px;justify-content:center">
+        <button class="btn btn-ghost" onclick="closeModal('resModal')">Close</button>
+        <a href="index.html" class="btn btn-primary">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="kente-divider"></div>
+  <div class="footer-top"><div class="container"><div class="footer-grid">
+    <div><div class="footer-brand-name">Rabboni <span>Restaurant</span></div><p class="footer-tagline">Exceptional Dining Experience in Techiman</p>
+      <div class="footer-social"><a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">🎵</a><a href="https://wa.me/233591447201" class="social-btn">💬</a></div></div>
+    <div><div class="footer-heading">Quick Links</div><div class="footer-links"><a href="index.html">→ Home</a><a href="menu.html">→ Menu</a><a href="order.html">→ Order Online</a><a href="contact.html">→ Contact</a></div></div>
+    <div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+233591447201">📞 059 144 7201</a><a href="contact.html">📍 Opp. Community Centre</a></div></div>
+    <div><div class="footer-heading">Hours</div><div class="footer-hours"><div class="hours-row"><span class="day">Mon – Sun</span><span class="time">6AM – 9PM</span></div></div></div>
+  </div></div></div>
+  <div class="footer-bottom"><div class="container"><div class="footer-bottom-inner"><span>© 2026 Rabboni Restaurant.</span><span>Techiman, Ghana 🇬🇭</span></div></div></div>
+</footer>
+
+<div class="floating-btns">
+  <a href="https://wa.me/233591447201" target="_blank" class="float-btn float-wa" data-label="WhatsApp Order">💬</a>
+  <a href="tel:+233591447201" class="float-btn float-call" data-label="Call Now">📞</a>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script>
+  // Occasion type selection
+  document.querySelectorAll('.res-type').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.res-type').forEach(x => x.classList.remove('selected'));
+      t.classList.add('selected');
+    });
+  });
+
+  // Time chips
+  document.querySelectorAll('.time-chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('.time-chip').forEach(x => x.classList.remove('selected'));
+      c.classList.add('selected');
+    });
+  });
+
+  // Guest counter
+  let guests = 2;
+  document.getElementById('guestMinus').addEventListener('click', () => { if (guests > 1) { guests--; document.getElementById('guestNum').textContent = guests; } });
+  document.getElementById('guestPlus').addEventListener('click', () => { if (guests < 20) { guests++; document.getElementById('guestNum').textContent = guests; } });
+
+  // Set min date to today
+  document.getElementById('res-date').min = new Date().toISOString().split('T')[0];
+
+  async function submitReservation() {
+    const name = document.getElementById('res-name').value.trim();
+    const phone = document.getElementById('res-phone').value.trim();
+    const date = document.getElementById('res-date').value;
+    const time = document.querySelector('.time-chip.selected')?.dataset.time || '18:00';
+    const type = document.querySelector('.res-type.selected')?.dataset.type || 'dinner';
+    const notes = document.getElementById('res-notes').value.trim();
+    if (!name || !phone || !date) { showToast('Please fill in name, phone and date.', 'error'); return; }
+    const btn = document.querySelector('button[onclick="submitReservation()"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Booking…'; }
+    try {
+      const res = await API.makeReservation({
+        customerName: name, customerPhone: phone,
+        date, time, guests, occasion: type, specialRequests: notes
+      });
+      const r = res.data;
+      document.getElementById('conf-name').textContent = name;
+      document.getElementById('conf-ref').textContent = r.ref_number;
+      document.getElementById('conf-date').textContent = new Date(date + 'T12:00:00').toLocaleDateString('en-GH', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+      document.getElementById('conf-time').textContent = time;
+      document.getElementById('conf-guests').textContent = guests + ' guest' + (guests !== 1 ? 's' : '');
+      document.getElementById('conf-type').textContent = type.charAt(0).toUpperCase() + type.slice(1);
+      document.getElementById('conf-phone').textContent = phone;
+      openModal('resModal');
+    } catch (err) {
+      showToast(err.message || 'Could not submit reservation. Please try again.', 'error');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = '📅 Confirm Reservation'; }
+    }
+  }
+</script>
+</body>
+</html>

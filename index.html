@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rabboni Restaurant – Exceptional Dining in Techiman</title>
+  <meta name="description" content="Experience authentic African and continental cuisine at Rabboni Restaurant, Techiman. Dine in, order online, or book a table.">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--dark);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(155,35,53,0.22) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 20% 80%, rgba(212,168,67,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 80% 90%, rgba(193,122,58,0.12) 0%, transparent 60%);
+    }
+    .hero-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image:
+        repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%),
+        repeating-linear-gradient(-45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%);
+      background-size: 40px 40px;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 120px 0 80px;
+      max-width: 700px;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(212,168,67,0.08);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 8px 18px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      animation: fadeInUp 0.7s ease both;
+    }
+    .hero-eyebrow .dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.08;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease 0.1s both;
+    }
+    .hero-title .line-accent {
+      color: var(--gold);
+      font-style: italic;
+      display: block;
+    }
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 40px;
+      max-width: 520px;
+      animation: fadeInUp 0.7s ease 0.2s both;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.7s ease 0.3s both;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      animation: fadeInUp 0.7s ease 0.4s both;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+    .hero-dish-float {
+      position: absolute;
+      right: 4%;
+      top: 50%;
+      transform: translateY(-50%);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      z-index: 2;
+      animation: fadeIn 0.9s ease 0.5s both;
+    }
+    .hero-dish-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      text-align: center;
+      transition: var(--transition);
+      cursor: pointer;
+      width: 130px;
+    }
+    .hero-dish-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-gold);
+    }
+    .hero-dish-card .dish-emoji { font-size: 2.4rem; margin-bottom: 8px; display: block; animation: float 4s ease-in-out infinite; }
+    .hero-dish-card:nth-child(2) .dish-emoji { animation-delay: 0.5s; }
+    .hero-dish-card:nth-child(3) .dish-emoji { animation-delay: 1s; }
+    .hero-dish-card:nth-child(4) .dish-emoji { animation-delay: 1.5s; }
+    .hero-dish-card .dish-name { font-size: 0.76rem; font-weight: 600; color: var(--text-muted); }
+    .hero-dish-card .dish-price { font-size: 0.82rem; color: var(--gold); font-weight: 600; margin-top: 4px; font-family: 'Playfair Display', serif; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+
+    /* ── Why Choose Us ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      text-align: center;
+      transition: var(--transition);
+    }
+    .feature-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-gold);
+    }
+    .feature-icon {
+      width: 60px; height: 60px;
+      background: rgba(212,168,67,0.1);
+      border: 1px solid rgba(212,168,67,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin: 0 auto 14px;
+    }
+    .feature-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+    .feature-desc { font-size: 0.82rem; color: var(--text-muted); }
+
+    /* ── Reviews Carousel ── */
+    .reviews-track {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .reviews-track::-webkit-scrollbar { display: none; }
+    .review-card {
+      flex: 0 0 320px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      transition: var(--transition);
+    }
+    .review-card:hover { border-color: var(--border-strong); }
+    .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .review-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .review-name { font-weight: 600; font-size: 0.95rem; }
+    .review-date { font-size: 0.76rem; color: var(--text-muted); }
+    .review-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; font-style: italic; }
+    .review-nav { display: flex; gap: 8px; justify-content: center; margin-top: 24px; }
+    .review-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-dim); cursor: pointer; transition: var(--transition); border: none; }
+    .review-dot.active { background: var(--gold); width: 24px; border-radius: 4px; }
+
+    /* ── Promotions ── */
+    .promo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .promo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .promo-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-gold); border-color: var(--border-strong); }
+    .promo-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(212,168,67,0.08) 0%, transparent 70%);
+    }
+    .promo-tag { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .promo-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin-bottom: 8px; }
+    .promo-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+    .promo-emoji { font-size: 3rem; position: absolute; top: 20px; right: 24px; opacity: 0.7; }
+
+    @media (max-width: 900px) { .hero-dish-float { display: none; } .promo-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .hero-stats { gap: 24px; } }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">🍽️</div>
+      <div class="nav-logo-text">Rabboni <span>Restaurant</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="about.html">About</a>
+      <a href="menu.html">Menu</a>
+      <a href="order.html">Order Online</a>
+      <a href="reservations.html">Reservations</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="promotions.html">Promotions</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+      <a href="reservations.html" class="nav-cta">Book Table</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html" class="active">Home</a>
+  <a href="about.html">About</a>
+  <a href="menu.html">Menu</a>
+  <a href="order.html">Order Online</a>
+  <a href="reservations.html">Reservations</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="promotions.html">Promotions</a>
+  <a href="reviews.html">Reviews</a>
+  <a href="contact.html">Contact</a>
+  <a href="loyalty.html">Loyalty</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-eyebrow"><span class="dot"></span> Now Open Daily 6AM – 9PM</div>
+      <h1 class="hero-title">
+        Exceptional Dining
+        <span class="line-accent">Experience in Techiman</span>
+      </h1>
+      <p class="hero-subtitle">
+        Where authentic African flavours meet warm hospitality. Crafted with fresh local ingredients, every dish at Rabboni tells a story of tradition, love, and culinary excellence.
+      </p>
+      <div class="hero-actions">
+        <a href="menu.html" class="btn btn-gold btn-lg">🍽️ View Menu</a>
+        <a href="reservations.html" class="btn btn-primary btn-lg">📅 Reserve Table</a>
+        <a href="order.html" class="btn btn-outline btn-lg">🚚 Order Delivery</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">3.8<span style="font-size:1.2rem;color:var(--gold)">★</span></div>
+          <div class="stat-label">Customer Rating</div>
+        </div>
+        <div>
+          <div class="stat-num">50+</div>
+          <div class="stat-label">Dishes on Menu</div>
+        </div>
+        <div>
+          <div class="stat-num">7<span style="font-size:1rem">days</span></div>
+          <div class="stat-label">Always Open</div>
+        </div>
+        <div>
+          <div class="stat-num">5+</div>
+          <div class="stat-label">Years Serving</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating dish cards -->
+  <div class="hero-dish-float">
+    <a href="menu.html" class="hero-dish-card">
+      <span class="dish-emoji">🍛</span>
+      <div class="dish-name">Jollof Rice</div>
+      <div class="dish-price">GHS 25+</div>
+    </a>
+    <a href="menu.html" class="hero-dish-card">
+      <span class="dish-emoji">🐟</span>
+      <div class="dish-name">Banku & Tilapia</div>
+      <div class="dish-price">GHS 55</div>
+    </a>
+    <a href="menu.html" class="hero-dish-card">
+      <span class="dish-emoji">🍕</span>
+      <div class="dish-name">Pizza</div>
+      <div class="dish-price">GHS 50+</div>
+    </a>
+    <a href="menu.html" class="hero-dish-card">
+      <span class="dish-emoji">🍳</span>
+      <div class="dish-name">Full Breakfast</div>
+      <div class="dish-price">GHS 45</div>
+    </a>
+  </div>
+</section>
+
+<!-- INFO BAR -->
+<div class="info-bar">
+  <div class="info-bar-inner">
+    <div class="info-item"><span class="icon">📍</span><strong>Opposite Techiman Community Centre</strong></div>
+    <div class="info-item"><span class="icon">📞</span><strong>059 144 7201</strong></div>
+    <div class="info-item"><span class="icon">🚚</span><strong>Free Delivery on Selected Packages</strong></div>
+    <div class="info-item"><span class="icon">⭐</span><strong>3.8+ Customer Rating</strong></div>
+    <div class="info-item"><span class="icon">🕐</span><strong>6:00 AM – 9:00 PM Daily</strong></div>
+  </div>
+</div>
+
+<!-- FEATURED DISHES -->
+<section style="background:var(--dark-2)">
+  <div class="container">
+    <div class="section-header centered animate-in">
+      <div class="section-label">Our Specialties</div>
+      <h2 class="section-title">Featured <span>Dishes</span></h2>
+      <div class="gold-divider"><div class="diamond"></div></div>
+      <p class="section-subtitle">From hearty Ghanaian classics to continental favourites — something for every craving.</p>
+    </div>
+    <div class="grid-auto">
+      <div class="food-card animate-in">
+        <div class="food-card-img">🍛</div>
+        <div class="food-card-body">
+          <div class="food-card-name">Jollof Rice with Chicken</div>
+          <div class="food-card-desc">Our signature perfectly spiced Ghanaian Jollof rice, served with succulent grilled chicken.</div>
+          <div class="food-card-footer">
+            <span class="food-price">GHS 45</span>
+            <span class="food-tag">Popular</span>
+          </div>
+        </div>
+      </div>
+      <div class="food-card animate-in">
+        <div class="food-card-img">🐟</div>
+        <div class="food-card-body">
+          <div class="food-card-name">Banku & Tilapia</div>
+          <div class="food-card-desc">Fresh tilapia expertly grilled and paired with smooth, perfectly fermented banku.</div>
+          <div class="food-card-footer">
+            <span class="food-price">GHS 55</span>
+            <span class="food-tag">Signature</span>
+          </div>
+        </div>
+      </div>
+      <div class="food-card animate-in">
+        <div class="food-card-img">🍚</div>
+        <div class="food-card-body">
+          <div class="food-card-name">Rabboni Special Fried Rice</div>
+          <div class="food-card-desc">Our chef's own recipe — a special blend of fried rice loaded with vegetables and protein.</div>
+          <div class="food-card-footer">
+            <span class="food-price">GHS 60</span>
+            <span class="food-tag">Chef's Pick</span>
+          </div>
+        </div>
+      </div>
+      <div class="food-card animate-in">
+        <div class="food-card-img">🍕</div>
+        <div class="food-card-body">
+          <div class="food-card-name">Chicken Pizza</div>
+          <div class="food-card-desc">Hand-stretched dough with rich tomato base, generous chicken, and melted mozzarella.</div>
+          <div class="food-card-footer">
+            <span class="food-price">GHS 60</span>
+            <span class="food-tag">Fan Fave</span>
+          </div>
+        </div>
+      </div>
+      <div class="food-card animate-in">
+        <div class="food-card-img">🍳</div>
+        <div class="food-card-body">
+          <div class="food-card-name">Full Rabboni Breakfast</div>
+          <div class="food-card-desc">The complete morning spread — eggs, toast, sausage, beans, and more to start your day right.</div>
+          <div class="food-card-footer">
+            <span class="food-price">GHS 45</span>
+            <span class="food-tag">Breakfast</span>
+          </div>
+        </div>
+      </div>
+      <div class="food-card animate-in">
+        <div class="food-card-img">🍖</div>
+        <div class="food-card-body">
+          <div class="food-card-name">Grilled Chicken</div>
+          <div class="food-card-desc">Tender whole chicken marinated in house spices and slow-grilled to perfection.</div>
+          <div class="food-card-footer">
+            <span class="food-price">GHS 55</span>
+            <span class="food-tag">Grill</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-32 animate-in">
+      <a href="menu.html" class="btn btn-outline btn-lg">Explore Full Menu →</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section>
+  <div class="container">
+    <div class="section-header centered animate-in">
+      <div class="section-label">Why Rabboni</div>
+      <h2 class="section-title">The <span>Rabboni</span> Difference</h2>
+      <div class="gold-divider"><div class="diamond"></div></div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card animate-in">
+        <div class="feature-icon">🌿</div>
+        <div class="feature-title">Fresh Ingredients</div>
+        <div class="feature-desc">We source the freshest local ingredients daily for every dish we prepare.</div>
+      </div>
+      <div class="feature-card animate-in">
+        <div class="feature-icon">🍲</div>
+        <div class="feature-title">Local & Continental</div>
+        <div class="feature-desc">A full range from authentic Ghanaian cuisine to Chinese, Italian, and more.</div>
+      </div>
+      <div class="feature-card animate-in">
+        <div class="feature-icon">👨‍👩‍👧</div>
+        <div class="feature-title">Family Friendly</div>
+        <div class="feature-desc">A welcoming environment for everyone — couples, families, and groups.</div>
+      </div>
+      <div class="feature-card animate-in">
+        <div class="feature-icon">🎵</div>
+        <div class="feature-title">Live Music</div>
+        <div class="feature-desc">Enjoy live performances on special nights for a truly memorable experience.</div>
+      </div>
+      <div class="feature-card animate-in">
+        <div class="feature-icon">🚗</div>
+        <div class="feature-title">Free Parking</div>
+        <div class="feature-desc">Ample and secure parking available for all our valued guests.</div>
+      </div>
+      <div class="feature-card animate-in">
+        <div class="feature-icon">🚚</div>
+        <div class="feature-title">Food Delivery</div>
+        <div class="feature-desc">Free delivery available on selected packages, right to your doorstep.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section style="background:var(--dark-2)">
+  <div class="container">
+    <div class="section-header centered animate-in">
+      <div class="section-label">Testimonials</div>
+      <h2 class="section-title">What Our <span>Customers Say</span></h2>
+      <div class="gold-divider"><div class="diamond"></div></div>
+    </div>
+    <div class="reviews-track animate-in" id="reviewsTrack">
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">AK</div>
+          <div><div class="review-name">Ama Koduah</div><div class="review-date">2 weeks ago</div></div>
+        </div>
+        <div class="stars mb-8">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">"The Jollof rice here is absolutely incredible — easily the best in Techiman. The service was warm and attentive. Will definitely be coming back!"</p>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar" style="background:var(--gold-muted)">KB</div>
+          <div><div class="review-name">Kwame Boateng</div><div class="review-date">1 month ago</div></div>
+        </div>
+        <div class="stars mb-8">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span>
+        </div>
+        <p class="review-text">"Brought the whole family for a Sunday lunch. The Banku and Tilapia was fresh and the atmosphere was perfect. The kids loved it too!"</p>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar" style="background:var(--amber)">ES</div>
+          <div><div class="review-name">Efua Sarpong</div><div class="review-date">3 weeks ago</div></div>
+        </div>
+        <div class="stars mb-8">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">"Had the Full Rabboni Breakfast and it was divine! Great value for money and the staff made us feel so welcome. This is our new favourite spot."</p>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar" style="background:var(--surface-3)">MA</div>
+          <div><div class="review-name">Michael Asante</div><div class="review-date">2 months ago</div></div>
+        </div>
+        <div class="stars mb-8">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">"The Special Fried Rice was exceptional. I ordered delivery and it arrived hot and well-packaged. Pricing is very fair for the quality."</p>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar" style="background:#2A4E6C">NA</div>
+          <div><div class="review-name">Nana Achiaa</div><div class="review-date">1 week ago</div></div>
+        </div>
+        <div class="stars mb-8">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span>
+        </div>
+        <p class="review-text">"We celebrated my husband's birthday here and they made it so special. The couple's package was wonderful. Live music was a beautiful touch!"</p>
+      </div>
+    </div>
+    <div class="text-center mt-24 animate-in">
+      <a href="reviews.html" class="btn btn-outline">Read All Reviews →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROMOTIONS -->
+<section>
+  <div class="container">
+    <div class="section-header centered animate-in">
+      <div class="section-label">Special Offers</div>
+      <h2 class="section-title">Current <span>Promotions</span></h2>
+      <div class="gold-divider"><div class="diamond"></div></div>
+    </div>
+    <div class="promo-grid">
+      <div class="promo-card animate-in">
+        <div class="promo-emoji">🐣</div>
+        <div class="promo-tag">Limited Time</div>
+        <div class="promo-title">Easter Monday Package</div>
+        <div class="promo-desc">Celebrate the season with our specially curated Easter feast — a hearty spread for the whole family to enjoy together.</div>
+        <a href="promotions.html" class="btn btn-gold btn-sm">View Offer</a>
+      </div>
+      <div class="promo-card animate-in">
+        <div class="promo-emoji">💑</div>
+        <div class="promo-tag">Romance</div>
+        <div class="promo-title">Couple's Package</div>
+        <div class="promo-desc">A romantic dining experience for two — candlelight, a curated set menu, and complimentary dessert included.</div>
+        <a href="promotions.html" class="btn btn-gold btn-sm">View Offer</a>
+      </div>
+      <div class="promo-card animate-in">
+        <div class="promo-emoji">🌟</div>
+        <div class="promo-tag">Every Weekend</div>
+        <div class="promo-title">Weekend Specials</div>
+        <div class="promo-desc">Every Saturday and Sunday we bring special menu items and discounts exclusively for our weekend guests.</div>
+        <a href="promotions.html" class="btn btn-gold btn-sm">View Offer</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--dark-2);padding:60px 0">
+  <div class="container">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:56px 48px;text-align:center;position:relative;overflow:hidden" class="animate-in">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 0%,rgba(155,35,53,.15) 0%,transparent 70%)"></div>
+      <div style="position:relative;z-index:1">
+        <div class="section-label">Ready to Dine?</div>
+        <h2 class="section-title mt-8">Reserve Your <span>Table Today</span></h2>
+        <p style="color:var(--text-muted);max-width:480px;margin:12px auto 32px">
+          Book a table for any occasion — date night, family gathering, birthday celebration, or a casual meal with friends.
+        </p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <a href="reservations.html" class="btn btn-primary btn-lg">📅 Book a Table</a>
+          <a href="order.html" class="btn btn-outline btn-lg">🚚 Order Now</a>
+          <a href="tel:+233591447201" class="btn btn-ghost btn-lg">📞 Call Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="kente-divider"></div>
+  <div class="footer-top">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name">Rabboni <span>Restaurant</span></div>
+          <p class="footer-tagline">Exceptional Dining Experience in Techiman</p>
+          <p style="font-size:.88rem;color:var(--text-muted);line-height:1.7">
+            Where authentic African flavours meet warm hospitality. Every meal is crafted with love, fresh local ingredients, and a passion for excellence.
+          </p>
+          <div class="footer-social">
+            <a href="#" class="social-btn" title="Facebook">📘</a>
+            <a href="#" class="social-btn" title="Instagram">📸</a>
+            <a href="#" class="social-btn" title="TikTok">🎵</a>
+            <a href="https://wa.me/233591447201" class="social-btn" title="WhatsApp">💬</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Quick Links</div>
+          <div class="footer-links">
+            <a href="index.html">→ Home</a>
+            <a href="about.html">→ About Us</a>
+            <a href="menu.html">→ Our Menu</a>
+            <a href="order.html">→ Order Online</a>
+            <a href="gallery.html">→ Gallery</a>
+            <a href="promotions.html">→ Promotions</a>
+            <a href="loyalty.html">→ Loyalty Program</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Contact Us</div>
+          <div class="footer-links">
+            <a href="tel:+233591447201">📞 059 144 7201</a>
+            <a href="tel:+233242880601">📞 024 288 0601</a>
+            <a href="tel:+233206484613">📞 020 648 4613</a>
+            <a href="contact.html">📍 Opp. Community Centre</a>
+            <a href="contact.html">🏢 First Floor, OIB Building</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Opening Hours</div>
+          <div class="footer-hours">
+            <div class="hours-row"><span class="day">Mon – Sun</span><span class="time">6:00 AM – 9:00 PM</span></div>
+          </div>
+          <p style="margin-top:20px;font-size:.82rem;color:var(--text-muted);line-height:1.8">
+            🚚 Free Delivery on Selected Packages<br>⭐ 3.8+ Customer Rating<br>🎵 Live Music Nights
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="footer-bottom-inner">
+        <span>© 2026 Rabboni Restaurant. All rights reserved.</span>
+        <span>Techiman, Bono East Region, Ghana 🇬🇭</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING -->
+<div class="floating-btns">
+  <a href="https://wa.me/233591447201" target="_blank" class="float-btn float-wa" data-label="WhatsApp Order">💬</a>
+  <a href="tel:+233591447201" class="float-btn float-call" data-label="Call Now">📞</a>
+  <a href="reservations.html" class="float-btn float-reserve" data-label="Book Table">📅</a>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

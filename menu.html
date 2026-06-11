@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu – Rabboni Restaurant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .menu-controls { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 32px; }
+    .menu-search { flex: 1; min-width: 220px; position: relative; }
+    .menu-search input { width: 100%; padding: 12px 16px 12px 44px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 40px; color: var(--text); font-size: .9rem; outline: none; transition: var(--transition); }
+    .menu-search input:focus { border-color: var(--gold); background: var(--surface-2); }
+    .menu-search input::placeholder { color: var(--text-dim); }
+    .menu-search .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--text-dim); pointer-events: none; }
+    .menu-category-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+    .cat-tab { padding: 9px 18px; border-radius: 24px; font-size: .82rem; font-weight: 600; cursor: pointer; transition: var(--transition); border: 1.5px solid var(--border); color: var(--text-muted); background: transparent; display: flex; align-items: center; gap: 6px; }
+    .cat-tab:hover { border-color: var(--border-strong); color: var(--text); }
+    .cat-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .menu-section { margin-bottom: 56px; }
+    .menu-section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .menu-section-icon { width: 48px; height: 48px; background: rgba(212,168,67,.1); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+    .menu-section-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; }
+    .menu-section-count { margin-left: auto; font-size: .78rem; color: var(--text-dim); background: var(--surface); border: 1px solid var(--border); padding: 4px 12px; border-radius: 12px; }
+    .menu-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .menu-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; display: flex; gap: 14px; align-items: center; transition: var(--transition); cursor: pointer; }
+    .menu-item:hover { border-color: rgba(212,168,67,.4); transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+    .menu-item-emoji { font-size: 2.4rem; flex-shrink: 0; width: 52px; text-align: center; }
+    .menu-item-info { flex: 1; min-width: 0; }
+    .menu-item-name { font-family: 'Playfair Display', serif; font-size: .98rem; font-weight: 600; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .menu-item-desc { font-size: .78rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px; }
+    .menu-item-footer { display: flex; align-items: center; gap: 8px; }
+    .menu-item-price { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--gold); font-weight: 600; }
+    .menu-item-add { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-left: auto; flex-shrink: 0; transition: var(--transition); border: none; cursor: pointer; }
+    .menu-item-add:hover { background: var(--primary-dark); transform: scale(1.1); }
+    .no-results { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+    .no-results .emoji { font-size: 3rem; margin-bottom: 16px; }
+    .popular-badge { font-size: .65rem; background: rgba(212,168,67,.15); color: var(--gold); border: 1px solid rgba(212,168,67,.2); padding: 2px 8px; border-radius: 8px; font-weight: 700; letter-spacing: .06em; }
+    /* Cart sticky */
+    .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border-strong); padding: 14px 24px; z-index: 400; transform: translateY(100%); transition: var(--transition); }
+    .cart-bar.visible { transform: translateY(0); }
+    .cart-bar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 16px; }
+    .cart-count { background: var(--primary); color: #fff; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: .82rem; font-weight: 700; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">🍽️</div>
+      <div class="nav-logo-text">Rabboni <span>Restaurant</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html" class="active">Menu</a>
+      <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+      <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+      <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a>
+      <a href="reservations.html" class="nav-cta">Book Table</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html" class="active">Menu</a>
+  <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+  <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+  <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a><a href="loyalty.html">Loyalty</a>
+</div>
+
+<div class="page-content">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-breadcrumb"><a href="index.html">Home</a><span class="sep">›</span><span>Menu</span></div>
+      <div class="section-label">What We Serve</div>
+      <h1 class="section-title">Our <span>Menu</span></h1>
+      <p style="color:var(--text-muted);max-width:600px;margin-top:12px">From authentic Ghanaian classics to continental favourites — explore over 50 dishes crafted with fresh ingredients and heart.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <!-- Controls -->
+      <div class="menu-controls">
+        <div class="menu-search">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="menuSearch" placeholder="Search dishes...">
+        </div>
+        <a href="order.html" class="btn btn-primary">🛒 Order Online</a>
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="menu-category-tabs" id="catTabs">
+        <button class="cat-tab active" data-cat="all">🍽️ All Items</button>
+        <button class="cat-tab" data-cat="breakfast">🍳 Breakfast</button>
+        <button class="cat-tab" data-cat="rice">🍛 Rice Dishes</button>
+        <button class="cat-tab" data-cat="local">🫕 Local Dishes</button>
+        <button class="cat-tab" data-cat="salads">🥗 Salads</button>
+        <button class="cat-tab" data-cat="chinese">🥢 Chinese</button>
+        <button class="cat-tab" data-cat="pasta">🍝 Pasta & Noodles</button>
+        <button class="cat-tab" data-cat="burgers">🍔 Burgers</button>
+        <button class="cat-tab" data-cat="grills">🔥 Grills</button>
+        <button class="cat-tab" data-cat="pizza">🍕 Pizza</button>
+        <button class="cat-tab" data-cat="drinks">🥤 Drinks</button>
+      </div>
+
+      <!-- Menu Sections -->
+      <div id="menuContent"></div>
+    </div>
+  </section>
+</div>
+
+<!-- Cart Bar -->
+<div class="cart-bar" id="cartBar">
+  <div class="cart-bar-inner">
+    <span class="cart-count" id="cartCount">0</span>
+    <span style="font-size:.9rem;font-weight:600" id="cartLabel">items in cart</span>
+    <span style="margin-left:auto;font-family:'Playfair Display',serif;color:var(--gold);font-size:1.1rem" id="cartTotal">GHS 0.00</span>
+    <a href="order.html" class="btn btn-primary btn-sm">View Cart →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="kente-divider"></div>
+  <div class="footer-top"><div class="container"><div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Rabboni <span>Restaurant</span></div>
+      <p class="footer-tagline">Exceptional Dining Experience in Techiman</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a>
+        <a href="#" class="social-btn">🎵</a><a href="https://wa.me/233591447201" class="social-btn">💬</a>
+      </div>
+    </div>
+    <div><div class="footer-heading">Quick Links</div><div class="footer-links">
+      <a href="index.html">→ Home</a><a href="menu.html">→ Menu</a>
+      <a href="order.html">→ Order Online</a><a href="contact.html">→ Contact</a>
+    </div></div>
+    <div><div class="footer-heading">Contact</div><div class="footer-links">
+      <a href="tel:+233591447201">📞 059 144 7201</a>
+      <a href="contact.html">📍 Opp. Community Centre</a>
+    </div></div>
+    <div><div class="footer-heading">Hours</div><div class="footer-hours">
+      <div class="hours-row"><span class="day">Mon – Sun</span><span class="time">6AM – 9PM</span></div>
+    </div></div>
+  </div></div></div>
+  <div class="footer-bottom"><div class="container"><div class="footer-bottom-inner">
+    <span>© 2026 Rabboni Restaurant.</span><span>Techiman, Ghana 🇬🇭</span>
+  </div></div></div>
+</footer>
+
+<div class="floating-btns">
+  <a href="https://wa.me/233591447201" target="_blank" class="float-btn float-wa" data-label="WhatsApp Order">💬</a>
+  <a href="tel:+233591447201" class="float-btn float-call" data-label="Call Now">📞</a>
+  <a href="reservations.html" class="float-btn float-reserve" data-label="Book Table">📅</a>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script src="js/menu.js"></script>
+</body>
+</html>

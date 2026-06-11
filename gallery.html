@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery – Rabboni Restaurant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .gallery-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+    .gal-filter { padding: 9px 18px; border-radius: 24px; font-size: .82rem; font-weight: 600; cursor: pointer; transition: var(--transition); border: 1.5px solid var(--border); color: var(--text-muted); background: transparent; }
+    .gal-filter:hover { border-color: var(--border-strong); color: var(--text); }
+    .gal-filter.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    /* Masonry */
+    .masonry-grid { columns: 4; column-gap: 16px; }
+    .masonry-item { break-inside: avoid; margin-bottom: 16px; position: relative; border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; border: 1px solid var(--border); transition: var(--transition); }
+    .masonry-item:hover { transform: scale(1.02); border-color: var(--border-strong); box-shadow: var(--shadow-gold); }
+    .masonry-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-thumb { width: 100%; display: block; background: var(--surface-2); }
+    .gallery-thumb-placeholder { width: 100%; background: var(--surface-2); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; transition: var(--transition); }
+    .masonry-item:hover .gallery-thumb-placeholder { transform: scale(1.08); }
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 60%); opacity: 0; transition: var(--transition); display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; }
+    .gallery-overlay-title { font-family: 'Playfair Display', serif; font-size: .95rem; font-weight: 600; margin-bottom: 4px; }
+    .gallery-overlay-cat { font-size: .75rem; color: var(--gold); }
+    .gallery-expand { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; background: rgba(0,0,0,.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .9rem; opacity: 0; transition: var(--transition); }
+    .masonry-item:hover .gallery-expand { opacity: 1; }
+
+    /* Lightbox */
+    .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.94); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: var(--transition); padding: 20px; }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox-content { max-width: 800px; width: 100%; position: relative; }
+    .lightbox-img { width: 100%; border-radius: var(--radius-xl); background: var(--surface-2); min-height: 360px; display: flex; align-items: center; justify-content: center; font-size: 8rem; }
+    .lightbox-info { margin-top: 16px; text-align: center; }
+    .lightbox-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px; }
+    .lightbox-cat { color: var(--gold); font-size: .85rem; }
+    .lightbox-close { position: absolute; top: -48px; right: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; transition: var(--transition); color: var(--text-muted); }
+    .lightbox-close:hover { background: var(--primary); color: #fff; }
+    .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,.6); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: var(--transition); color: var(--text); }
+    .lightbox-nav:hover { background: var(--primary); }
+    .lightbox-prev { left: -60px; }
+    .lightbox-next { right: -60px; }
+
+    @media(max-width:1024px){ .masonry-grid { columns: 3; } }
+    @media(max-width:768px){ .masonry-grid { columns: 2; } .lightbox-prev,.lightbox-next { display: none; } }
+    @media(max-width:480px){ .masonry-grid { columns: 2; column-gap:10px; } .masonry-item { margin-bottom: 10px; } }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="nav-logo-icon">🍽️</div><div class="nav-logo-text">Rabboni <span>Restaurant</span></div></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+      <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+      <a href="gallery.html" class="active">Gallery</a><a href="promotions.html">Promotions</a>
+      <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a>
+      <a href="reservations.html" class="nav-cta">Book Table</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+  <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+  <a href="gallery.html" class="active">Gallery</a><a href="promotions.html">Promotions</a>
+  <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a><a href="loyalty.html">Loyalty</a>
+</div>
+
+<div class="page-content">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-breadcrumb"><a href="index.html">Home</a><span class="sep">›</span><span>Gallery</span></div>
+      <div class="section-label">Visual Journey</div>
+      <h1 class="section-title">Our <span>Gallery</span></h1>
+      <p style="color:var(--text-muted);max-width:600px;margin-top:12px">A glimpse into the Rabboni experience — our food, our space, our moments.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <!-- Filters -->
+      <div class="gallery-filters" id="galFilters">
+        <button class="gal-filter active" data-cat="all">🖼️ All</button>
+        <button class="gal-filter" data-cat="food">🍽️ Food</button>
+        <button class="gal-filter" data-cat="interior">🏠 Interior</button>
+        <button class="gal-filter" data-cat="outdoor">🌿 Outdoor</button>
+        <button class="gal-filter" data-cat="events">🎉 Events</button>
+        <button class="gal-filter" data-cat="music">🎵 Live Music</button>
+        <button class="gal-filter" data-cat="moments">😊 Customer Moments</button>
+      </div>
+
+      <!-- Masonry Grid -->
+      <div class="masonry-grid" id="galleryGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-content">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">‹</button>
+    <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">›</button>
+    <div class="lightbox-img" id="lightboxImg">🖼️</div>
+    <div class="lightbox-info">
+      <div class="lightbox-title" id="lightboxTitle"></div>
+      <div class="lightbox-cat" id="lightboxCat"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="kente-divider"></div>
+  <div class="footer-top"><div class="container"><div class="footer-grid">
+    <div><div class="footer-brand-name">Rabboni <span>Restaurant</span></div><p class="footer-tagline">Exceptional Dining Experience in Techiman</p>
+      <div class="footer-social"><a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">🎵</a><a href="https://wa.me/233591447201" class="social-btn">💬</a></div></div>
+    <div><div class="footer-heading">Quick Links</div><div class="footer-links"><a href="index.html">→ Home</a><a href="menu.html">→ Menu</a><a href="reservations.html">→ Reservations</a><a href="contact.html">→ Contact</a></div></div>
+    <div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+233591447201">📞 059 144 7201</a><a href="contact.html">📍 Opp. Community Centre</a></div></div>
+    <div><div class="footer-heading">Hours</div><div class="footer-hours"><div class="hours-row"><span class="day">Mon – Sun</span><span class="time">6AM – 9PM</span></div></div></div>
+  </div></div></div>
+  <div class="footer-bottom"><div class="container"><div class="footer-bottom-inner"><span>© 2026 Rabboni Restaurant.</span><span>Techiman, Ghana 🇬🇭</span></div></div></div>
+</footer>
+
+<div class="floating-btns">
+  <a href="https://wa.me/233591447201" target="_blank" class="float-btn float-wa" data-label="WhatsApp Order">💬</a>
+  <a href="tel:+233591447201" class="float-btn float-call" data-label="Call Now">📞</a>
+  <a href="reservations.html" class="float-btn float-reserve" data-label="Book Table">📅</a>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script src="js/gallery.js"></script>
+</body>
+</html>

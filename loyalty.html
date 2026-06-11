@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loyalty Program – Rabboni Restaurant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Tiers */
+    .tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .tier-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 32px 24px; text-align: center; transition: var(--transition); position: relative; overflow: hidden; }
+    .tier-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+    .tier-bronze::before { background: linear-gradient(90deg, #8B6340, #C4936A, #8B6340); }
+    .tier-silver::before { background: linear-gradient(90deg, #8A9BA8, #C8D6E0, #8A9BA8); }
+    .tier-gold::before { background: linear-gradient(90deg, var(--gold-muted), var(--gold), var(--gold-muted)); }
+    .tier-card:hover { transform: translateY(-4px); border-color: var(--border-strong); box-shadow: var(--shadow-gold); }
+    .tier-icon { font-size: 2.8rem; margin-bottom: 12px; }
+    .tier-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+    .tier-spend { font-size: .82rem; color: var(--text-muted); margin-bottom: 16px; }
+    .tier-perks { display: flex; flex-direction: column; gap: 8px; text-align: left; margin-top: 16px; }
+    .tier-perk { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--text-muted); }
+    .tier-perk .check { color: var(--gold); flex-shrink: 0; }
+    /* Membership card */
+    .membership-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--dark-2) 50%, var(--surface-3) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      max-width: 480px;
+    }
+    .membership-card::before { content: ''; position: absolute; top: -60%; right: -30%; width: 300px; height: 300px; border-radius: 50%; background: rgba(212,168,67,.12); pointer-events: none; }
+    .membership-card::after { content: ''; position: absolute; bottom: -40%; left: -20%; width: 200px; height: 200px; border-radius: 50%; background: rgba(155,35,53,.15); pointer-events: none; }
+    .card-pattern { position: absolute; inset: 0; opacity: .04; background-image: repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%), repeating-linear-gradient(-45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%); background-size: 30px 30px; }
+    .card-inner { position: relative; z-index: 1; }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+    .card-brand { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; }
+    .card-brand span { color: var(--gold); }
+    .card-tier-badge { background: rgba(212,168,67,.2); border: 1px solid rgba(212,168,67,.35); border-radius: 20px; padding: 4px 12px; font-size: .72rem; font-weight: 700; color: var(--gold); letter-spacing: .1em; text-transform: uppercase; }
+    .card-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+    .card-number { font-size: .78rem; color: rgba(240,226,196,.5); letter-spacing: .2em; margin-bottom: 24px; font-family: monospace; }
+    .card-points-row { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
+    .card-points-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: var(--gold); line-height: 1; }
+    .card-points-label { font-size: .75rem; color: rgba(240,226,196,.6); margin-top: 4px; }
+    .card-progress-bar { height: 6px; background: rgba(255,255,255,.1); border-radius: 3px; margin-bottom: 8px; }
+    .card-progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold-muted), var(--gold)); border-radius: 3px; }
+    .card-progress-label { display: flex; justify-content: space-between; font-size: .7rem; color: rgba(240,226,196,.5); }
+    .card-footer { display: flex; justify-content: space-between; align-items: flex-end; }
+    .card-expiry { font-size: .72rem; color: rgba(240,226,196,.4); }
+    /* QR code placeholder */
+    .qr-placeholder { width: 72px; height: 72px; background: rgba(255,255,255,.95); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; flex-shrink: 0; }
+    /* How it works */
+    .steps-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; position: relative; }
+    .steps-row::before { content: ''; position: absolute; top: 28px; left: 12.5%; right: 12.5%; height: 1px; background: var(--border); z-index: 0; }
+    .how-step { text-align: center; position: relative; z-index: 1; padding: 0 12px; }
+    .how-step-num { width: 56px; height: 56px; border-radius: 50%; background: var(--surface); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--gold); margin: 0 auto 16px; }
+    .how-step-title { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 6px; }
+    .how-step-desc { font-size: .82rem; color: var(--text-muted); line-height: 1.6; }
+    /* Rewards list */
+    .rewards-list { display: flex; flex-direction: column; gap: 12px; }
+    .reward-item { display: flex; align-items: center; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; transition: var(--transition); }
+    .reward-item:hover { border-color: var(--border-strong); }
+    .reward-pts { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold); font-weight: 700; min-width: 80px; flex-shrink: 0; }
+    .reward-desc { font-size: .9rem; flex: 1; }
+    .reward-val { font-size: .82rem; color: var(--text-muted); }
+    @media(max-width:768px){ .tier-grid { grid-template-columns:1fr; } .steps-row { grid-template-columns:1fr 1fr; } .steps-row::before { display:none; } }
+    @media(max-width:480px){ .steps-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="nav-logo-icon">🍽️</div><div class="nav-logo-text">Rabboni <span>Restaurant</span></div></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+      <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+      <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+      <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a>
+      <a href="reservations.html" class="nav-cta">Book Table</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+  <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+  <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+  <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a><a href="loyalty.html" class="active">Loyalty</a>
+</div>
+
+<div class="page-content">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-breadcrumb"><a href="index.html">Home</a><span class="sep">›</span><span>Loyalty Program</span></div>
+      <div class="section-label">Rewards &amp; Membership</div>
+      <h1 class="section-title">Rabboni <span>Loyalty Program</span></h1>
+      <p style="color:var(--text-muted);max-width:600px;margin-top:12px">Earn points every time you dine or order. Redeem for discounts, free meals, and exclusive birthday rewards.</p>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section>
+    <div class="container">
+      <div class="section-header centered animate-in">
+        <div class="section-label">The Program</div>
+        <h2 class="section-title">How It <span>Works</span></h2>
+        <div class="gold-divider"><div class="diamond"></div></div>
+      </div>
+      <div class="steps-row">
+        <div class="how-step animate-in"><div class="how-step-num">1</div><div class="how-step-title">Sign Up Free</div><div class="how-step-desc">Register your name and phone number at the restaurant or fill in the form below.</div></div>
+        <div class="how-step animate-in"><div class="how-step-num">2</div><div class="how-step-title">Dine &amp; Earn</div><div class="how-step-desc">Earn 1 point for every GHS 1 spent on food and drinks at Rabboni.</div></div>
+        <div class="how-step animate-in"><div class="how-step-num">3</div><div class="how-step-title">Redeem Points</div><div class="how-step-desc">Use your points to unlock discounts, free dishes, and special rewards.</div></div>
+        <div class="how-step animate-in"><div class="how-step-num">4</div><div class="how-step-title">Level Up</div><div class="how-step-desc">Accumulate spend to reach Silver or Gold tier and unlock exclusive perks.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMBERSHIP TIERS -->
+  <section style="background:var(--dark-2)">
+    <div class="container">
+      <div class="section-header centered animate-in">
+        <div class="section-label">Membership Levels</div>
+        <h2 class="section-title">Choose Your <span>Tier</span></h2>
+        <div class="gold-divider"><div class="diamond"></div></div>
+      </div>
+      <div class="tier-grid">
+        <div class="tier-card tier-bronze animate-in">
+          <div class="tier-icon">🥉</div>
+          <div class="tier-name" style="color:#C4936A">Bronze Member</div>
+          <div class="tier-spend">Spend up to GHS 500</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#C4936A">1 pt / GHS 1</div>
+          <div class="tier-perks">
+            <div class="tier-perk"><span class="check">✦</span>Earn points on every purchase</div>
+            <div class="tier-perk"><span class="check">✦</span>Birthday free dessert</div>
+            <div class="tier-perk"><span class="check">✦</span>Member-only promotions</div>
+            <div class="tier-perk"><span class="check">✦</span>Digital membership card</div>
+          </div>
+        </div>
+        <div class="tier-card tier-silver animate-in" style="border-color:rgba(200,214,224,.25)">
+          <div class="tier-icon">🥈</div>
+          <div class="tier-name" style="color:#C8D6E0">Silver Member</div>
+          <div class="tier-spend">Spend GHS 500 – 2,000</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#C8D6E0">1.5 pts / GHS 1</div>
+          <div class="tier-perks">
+            <div class="tier-perk"><span class="check">✦</span>Everything in Bronze</div>
+            <div class="tier-perk"><span class="check">✦</span>10% discount on all orders</div>
+            <div class="tier-perk"><span class="check">✦</span>Birthday free main course</div>
+            <div class="tier-perk"><span class="check">✦</span>Priority reservations</div>
+            <div class="tier-perk"><span class="check">✦</span>Free delivery all month</div>
+          </div>
+        </div>
+        <div class="tier-card tier-gold animate-in" style="border-color:rgba(212,168,67,.3)">
+          <div style="position:absolute;top:12px;right:12px;background:var(--gold);color:var(--dark);padding:3px 12px;border-radius:12px;font-size:.68rem;font-weight:700;letter-spacing:.06em">BEST VALUE</div>
+          <div class="tier-icon">👑</div>
+          <div class="tier-name" style="color:var(--gold)">Gold Member</div>
+          <div class="tier-spend">Spend over GHS 2,000</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold)">2 pts / GHS 1</div>
+          <div class="tier-perks">
+            <div class="tier-perk"><span class="check">✦</span>Everything in Silver</div>
+            <div class="tier-perk"><span class="check">✦</span>20% discount on all orders</div>
+            <div class="tier-perk"><span class="check">✦</span>Free birthday dinner for 2</div>
+            <div class="tier-perk"><span class="check">✦</span>VIP table preference always</div>
+            <div class="tier-perk"><span class="check">✦</span>Complimentary drinks monthly</div>
+            <div class="tier-perk"><span class="check">✦</span>Exclusive chef's table access</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIGITAL CARD + REWARDS -->
+  <section>
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start">
+        <!-- Digital Card -->
+        <div class="animate-in">
+          <div class="section-label">Your Card</div>
+          <h2 class="section-title mb-24">Digital <span>Membership Card</span></h2>
+          <div class="gold-divider"><div class="diamond"></div></div>
+          <p style="color:var(--text-muted);margin-bottom:28px;line-height:1.8">Your digital membership card is generated when you sign up. Present the QR code at checkout to earn and redeem points instantly.</p>
+          <div class="membership-card">
+            <div class="card-pattern"></div>
+            <div class="card-inner">
+              <div class="card-header">
+                <div>
+                  <div class="card-brand">Rabboni <span>Restaurant</span></div>
+                  <div style="font-size:.72rem;color:rgba(240,226,196,.5);margin-top:2px">Loyalty Program</div>
+                </div>
+                <div class="card-tier-badge">👑 Gold</div>
+              </div>
+              <div class="card-name" id="cardNameDisplay">Ama Mensah</div>
+              <div class="card-number">RBN •••• •••• 4721</div>
+              <div class="card-points-row">
+                <div>
+                  <div class="card-points-num" id="cardPoints">1,240</div>
+                  <div class="card-points-label">Reward Points</div>
+                </div>
+                <div class="qr-placeholder" id="qrCode">▦</div>
+              </div>
+              <div class="card-progress-bar">
+                <div class="card-progress-fill" style="width:62%"></div>
+              </div>
+              <div class="card-progress-label">
+                <span>1,240 pts</span>
+                <span>760 pts to Gold Tier</span>
+              </div>
+              <div class="card-footer" style="margin-top:16px">
+                <div class="card-expiry">Valid: Jan 2026 – Dec 2026</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rewards Table -->
+        <div class="animate-in">
+          <div class="section-label">Redeem</div>
+          <h2 class="section-title mb-24">Rewards <span>Catalogue</span></h2>
+          <div class="gold-divider"><div class="diamond"></div></div>
+          <div class="rewards-list">
+            <div class="reward-item">
+              <div class="reward-pts">100 pts</div>
+              <div><div class="reward-desc">Free Soft Drink</div><div class="reward-val">Worth GHS 10</div></div>
+              <span class="badge badge-gold">Easy</span>
+            </div>
+            <div class="reward-item">
+              <div class="reward-pts">250 pts</div>
+              <div><div class="reward-desc">GHS 20 Off Your Order</div><div class="reward-val">Any order over GHS 60</div></div>
+              <span class="badge badge-gold">Popular</span>
+            </div>
+            <div class="reward-item">
+              <div class="reward-pts">400 pts</div>
+              <div><div class="reward-desc">Free Dessert</div><div class="reward-val">Any dessert item</div></div>
+              <span class="badge badge-green">New</span>
+            </div>
+            <div class="reward-item">
+              <div class="reward-pts">600 pts</div>
+              <div><div class="reward-desc">Free Main Course</div><div class="reward-val">Up to GHS 55 value</div></div>
+              <span class="badge badge-gold">Value</span>
+            </div>
+            <div class="reward-item">
+              <div class="reward-pts">1,000 pts</div>
+              <div><div class="reward-desc">Free Meal for Two</div><div class="reward-val">2 mains + 2 drinks</div></div>
+              <span class="badge badge-red">Premium</span>
+            </div>
+            <div class="reward-item">
+              <div class="reward-pts">🎂 Birthday</div>
+              <div><div class="reward-desc">Birthday Surprise</div><div class="reward-val">Free dessert + special treat on your birthday</div></div>
+              <span class="badge badge-gold">Auto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGN UP -->
+  <section style="background:var(--dark-2)">
+    <div class="container">
+      <div style="max-width:560px;margin:0 auto;text-align:center" class="animate-in">
+        <div class="section-label">Join Today</div>
+        <h2 class="section-title mt-8">Sign Up for <span>Free</span></h2>
+        <div class="gold-divider"><div class="diamond"></div></div>
+        <p style="color:var(--text-muted);margin-bottom:32px">Join the Rabboni family and start earning rewards from your very first visit. Membership is completely free.</p>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:36px;text-align:left">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">First Name</label><input class="form-control" id="join-fname" placeholder="First name"></div>
+            <div class="form-group"><label class="form-label">Last Name</label><input class="form-control" id="join-lname" placeholder="Last name"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Phone Number</label><input class="form-control" id="join-phone" placeholder="05X XXX XXXX" type="tel"></div>
+          <div class="form-group"><label class="form-label">Birthday (for special reward)</label><input class="form-control" id="join-bday" type="date"></div>
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:20px">
+            <input type="checkbox" id="join-agree" style="margin-top:4px;accent-color:var(--gold)">
+            <label for="join-agree" style="font-size:.85rem;color:var(--text-muted)">I agree to receive occasional updates and promotional messages from Rabboni Restaurant.</label>
+          </div>
+          <button class="btn btn-gold w-full" style="width:100%;justify-content:center" onclick="joinLoyalty()">🎁 Join Loyalty Program</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="kente-divider"></div>
+  <div class="footer-top"><div class="container"><div class="footer-grid">
+    <div><div class="footer-brand-name">Rabboni <span>Restaurant</span></div><p class="footer-tagline">Exceptional Dining Experience in Techiman</p>
+      <div class="footer-social"><a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">🎵</a><a href="https://wa.me/233591447201" class="social-btn">💬</a></div></div>
+    <div><div class="footer-heading">Quick Links</div><div class="footer-links"><a href="index.html">→ Home</a><a href="menu.html">→ Menu</a><a href="reservations.html">→ Reservations</a><a href="contact.html">→ Contact</a></div></div>
+    <div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+233591447201">📞 059 144 7201</a><a href="contact.html">📍 Opp. Community Centre</a></div></div>
+    <div><div class="footer-heading">Hours</div><div class="footer-hours"><div class="hours-row"><span class="day">Mon – Sun</span><span class="time">6AM – 9PM</span></div></div></div>
+  </div></div></div>
+  <div class="footer-bottom"><div class="container"><div class="footer-bottom-inner"><span>© 2026 Rabboni Restaurant.</span><span>Techiman, Ghana 🇬🇭</span></div></div></div>
+</footer>
+<div class="floating-btns">
+  <a href="https://wa.me/233591447201" target="_blank" class="float-btn float-wa" data-label="WhatsApp Order">💬</a>
+  <a href="tel:+233591447201" class="float-btn float-call" data-label="Call Now">📞</a>
+  <a href="reservations.html" class="float-btn float-reserve" data-label="Book Table">📅</a>
+</div>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script>
+  async function joinLoyalty() {
+    const fname = document.getElementById('join-fname').value.trim();
+    const lname = document.getElementById('join-lname').value.trim();
+    const phone = document.getElementById('join-phone').value.trim();
+    const bday  = document.getElementById('join-bday').value;
+    const agree = document.getElementById('join-agree').checked;
+    if (!fname || !lname || !phone) { showToast('Please fill in your name and phone number.', 'error'); return; }
+    if (!agree) { showToast('Please accept the terms to continue.', 'error'); return; }
+    const btn = document.querySelector('button[onclick="joinLoyalty()"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Joining…'; }
+    try {
+      const res = await API.registerLoyalty({ firstName: fname, lastName: lname, phone, birthday: bday || null });
+      const member = res.data;
+      document.getElementById('cardNameDisplay').textContent = fname + ' ' + lname;
+      document.getElementById('cardPoints').textContent = '0';
+      showToast('Welcome to Rabboni Loyalty, ' + fname + '! 🎉', 'success');
+      document.querySelector('.membership-card').scrollIntoView({ behavior:'smooth', block:'center' });
+    } catch (err) {
+      showToast(err.message || 'Could not register. Phone number may already be registered.', 'error');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = '🎁 Join Loyalty Program'; }
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reviews – Rabboni Restaurant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .rating-summary { display: grid; grid-template-columns: auto 1fr; gap: 48px; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 40px; margin-bottom: 48px; }
+    .big-rating { text-align: center; }
+    .big-num { font-family: 'Playfair Display', serif; font-size: 5rem; font-weight: 900; color: var(--gold); line-height: 1; }
+    .big-stars { font-size: 1.4rem; letter-spacing: 2px; margin: 8px 0; color: var(--gold); }
+    .big-count { font-size: .85rem; color: var(--text-muted); }
+    .rating-bars { display: flex; flex-direction: column; gap: 10px; }
+    .rating-bar-row { display: flex; align-items: center; gap: 12px; font-size: .85rem; }
+    .rating-bar-label { width: 40px; color: var(--text-muted); flex-shrink: 0; }
+    .rating-bar-track { flex: 1; height: 8px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+    .rating-bar-fill { height: 100%; background: var(--gold); border-radius: 4px; transition: width 1s ease; }
+    .rating-bar-count { width: 28px; text-align: right; color: var(--text-muted); flex-shrink: 0; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-bottom: 48px; }
+    .review-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; transition: var(--transition); }
+    .review-card:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: var(--shadow-gold); }
+    .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .review-avatar { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+    .review-meta { flex: 1; }
+    .review-name { font-weight: 600; font-size: .95rem; margin-bottom: 2px; }
+    .review-date { font-size: .76rem; color: var(--text-muted); }
+    .review-text { font-size: .88rem; color: var(--text-muted); line-height: 1.65; font-style: italic; margin-top: 10px; }
+    .review-dish { margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; font-size: .75rem; background: rgba(212,168,67,.08); border: 1px solid rgba(212,168,67,.15); border-radius: 10px; padding: 3px 10px; color: var(--gold); }
+    /* Star picker */
+    .star-picker { display: flex; gap: 8px; }
+    .star-pick { font-size: 1.8rem; cursor: pointer; transition: var(--transition); color: var(--text-dim); }
+    .star-pick.active, .star-pick:hover { color: var(--gold); transform: scale(1.15); }
+    @media(max-width:600px){ .rating-summary { grid-template-columns: 1fr; gap: 24px; } }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="nav-logo-icon">🍽️</div><div class="nav-logo-text">Rabboni <span>Restaurant</span></div></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+      <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+      <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+      <a href="reviews.html" class="active">Reviews</a><a href="contact.html">Contact</a>
+      <a href="reservations.html" class="nav-cta">Book Table</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+  <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+  <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+  <a href="reviews.html" class="active">Reviews</a><a href="contact.html">Contact</a><a href="loyalty.html">Loyalty</a>
+</div>
+
+<div class="page-content">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-breadcrumb"><a href="index.html">Home</a><span class="sep">›</span><span>Reviews</span></div>
+      <div class="section-label">Customer Feedback</div>
+      <h1 class="section-title">Reviews & <span>Testimonials</span></h1>
+      <p style="color:var(--text-muted);max-width:600px;margin-top:12px">Hear what our valued guests have to say about dining at Rabboni Restaurant.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <!-- Rating Summary -->
+      <div class="rating-summary animate-in">
+        <div class="big-rating">
+          <div class="big-num">3.8</div>
+          <div class="big-stars">★★★★☆</div>
+          <div class="big-count">Based on 120+ reviews</div>
+        </div>
+        <div class="rating-bars">
+          <div class="rating-bar-row">
+            <span class="rating-bar-label">5 ★</span>
+            <div class="rating-bar-track"><div class="rating-bar-fill" style="width:45%"></div></div>
+            <span class="rating-bar-count">54</span>
+          </div>
+          <div class="rating-bar-row">
+            <span class="rating-bar-label">4 ★</span>
+            <div class="rating-bar-track"><div class="rating-bar-fill" style="width:30%"></div></div>
+            <span class="rating-bar-count">36</span>
+          </div>
+          <div class="rating-bar-row">
+            <span class="rating-bar-label">3 ★</span>
+            <div class="rating-bar-track"><div class="rating-bar-fill" style="width:15%"></div></div>
+            <span class="rating-bar-count">18</span>
+          </div>
+          <div class="rating-bar-row">
+            <span class="rating-bar-label">2 ★</span>
+            <div class="rating-bar-track"><div class="rating-bar-fill" style="width:6%"></div></div>
+            <span class="rating-bar-count">7</span>
+          </div>
+          <div class="rating-bar-row">
+            <span class="rating-bar-label">1 ★</span>
+            <div class="rating-bar-track"><div class="rating-bar-fill" style="width:4%"></div></div>
+            <span class="rating-bar-count">5</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Grid -->
+      <div class="reviews-grid" id="reviewsContainer">
+        <div class="review-card animate-in">
+          <div class="review-header">
+            <div class="review-avatar" style="background:var(--primary)">AK</div>
+            <div class="review-meta"><div class="review-name">Ama Koduah</div><div class="review-date">2 weeks ago</div></div>
+          </div>
+          <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+          <p class="review-text">"The Jollof rice here is absolutely incredible — easily the best in Techiman. The service was warm and attentive. Will definitely be coming back every week!"</p>
+          <div class="review-dish">🍛 Jollof Rice with Chicken</div>
+        </div>
+        <div class="review-card animate-in">
+          <div class="review-header">
+            <div class="review-avatar" style="background:var(--gold-muted)">KB</div>
+            <div class="review-meta"><div class="review-name">Kwame Boateng</div><div class="review-date">1 month ago</div></div>
+          </div>
+          <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div>
+          <p class="review-text">"Brought the whole family for a Sunday lunch. The Banku and Tilapia was super fresh and the atmosphere was perfect. The kids loved it — they're still talking about it!"</p>
+          <div class="review-dish">🐟 Banku & Tilapia</div>
+        </div>
+        <div class="review-card animate-in">
+          <div class="review-header">
+            <div class="review-avatar" style="background:var(--amber)">ES</div>
+            <div class="review-meta"><div class="review-name">Efua Sarpong</div><div class="review-date">3 weeks ago</div></div>
+          </div>
+          <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+          <p class="review-text">"Had the Full Rabboni Breakfast and it was divine! Great value for money. The staff went above and beyond to make us feel welcome. This is now our family's favourite spot in Techiman."</p>
+          <div class="review-dish">🍳 Full Rabboni Breakfast</div>
+        </div>
+        <div class="review-card animate-in">
+          <div class="review-header">
+            <div class="review-avatar" style="background:#2A4E6C">MA</div>
+            <div class="review-meta"><div class="review-name">Michael Asante</div><div class="review-date">2 months ago</div></div>
+          </div>
+          <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+          <p class="review-text">"The Special Fried Rice was exceptional. I ordered delivery and it arrived hot and well-packaged. The delivery time was accurate. Pricing is very fair for the quality you receive."</p>
+          <div class="review-dish">🍚 Rabboni Special Fried Rice</div>
+        </div>
+        <div class="review-card animate-in">
+          <div class="review-header">
+            <div class="review-avatar" style="background:#4A3060">NA</div>
+            <div class="review-meta"><div class="review-name">Nana Achiaa</div><div class="review-date">1 week ago</div></div>
+          </div>
+          <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div>
+          <p class="review-text">"We celebrated my husband's birthday here and they made it absolutely special! The couple's package was wonderful and the live music was a beautiful, unexpected touch."</p>
+          <div class="review-dish">💑 Couple's Package</div>
+        </div>
+        <div class="review-card animate-in">
+          <div class="review-header">
+            <div class="review-avatar" style="background:var(--surface-3)">KO</div>
+            <div class="review-meta"><div class="review-name">Kofi Opoku</div><div class="review-date">3 months ago</div></div>
+          </div>
+          <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div>
+          <p class="review-text">"Pizza was delicious and the service was fast. Would have been 5 stars but there was a slight wait during peak hours. Overall a great experience that I would recommend to anyone."</p>
+          <div class="review-dish">🍕 Chicken Pizza</div>
+        </div>
+      </div>
+
+      <!-- Submit Review -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:40px;max-width:640px;margin:0 auto" class="animate-in">
+        <div class="section-label">Share Your Experience</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:6px;margin-top:8px">Leave a <span style="color:var(--gold)">Review</span></h3>
+        <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:28px">We value your feedback — it helps us serve you better.</p>
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="form-control" id="rev-name" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Rating</label>
+          <div class="star-picker" id="starPicker">
+            <span class="star-pick" data-val="1">★</span>
+            <span class="star-pick" data-val="2">★</span>
+            <span class="star-pick" data-val="3">★</span>
+            <span class="star-pick" data-val="4">★</span>
+            <span class="star-pick" data-val="5">★</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Favourite Dish (optional)</label>
+          <input class="form-control" id="rev-dish" placeholder="e.g. Jollof Rice, Banku & Tilapia...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Review</label>
+          <textarea class="form-control" id="rev-text" rows="4" placeholder="Tell us about your experience..."></textarea>
+        </div>
+        <button class="btn btn-primary w-full" style="width:100%;justify-content:center" onclick="submitReview()">⭐ Submit Review</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="kente-divider"></div>
+  <div class="footer-top"><div class="container"><div class="footer-grid">
+    <div><div class="footer-brand-name">Rabboni <span>Restaurant</span></div><p class="footer-tagline">Exceptional Dining Experience in Techiman</p>
+      <div class="footer-social"><a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">🎵</a><a href="https://wa.me/233591447201" class="social-btn">💬</a></div></div>
+    <div><div class="footer-heading">Quick Links</div><div class="footer-links"><a href="index.html">→ Home</a><a href="menu.html">→ Menu</a><a href="reservations.html">→ Reservations</a><a href="contact.html">→ Contact</a></div></div>
+    <div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+233591447201">📞 059 144 7201</a><a href="contact.html">📍 Opp. Community Centre</a></div></div>
+    <div><div class="footer-heading">Hours</div><div class="footer-hours"><div class="hours-row"><span class="day">Mon – Sun</span><span class="time">6AM – 9PM</span></div></div></div>
+  </div></div></div>
+  <div class="footer-bottom"><div class="container"><div class="footer-bottom-inner"><span>© 2026 Rabboni Restaurant.</span><span>Techiman, Ghana 🇬🇭</span></div></div></div>
+</footer>
+<div class="floating-btns">
+  <a href="https://wa.me/233591447201" target="_blank" class="float-btn float-wa" data-label="WhatsApp Order">💬</a>
+  <a href="tel:+233591447201" class="float-btn float-call" data-label="Call Now">📞</a>
+  <a href="reservations.html" class="float-btn float-reserve" data-label="Book Table">📅</a>
+</div>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script>
+  let selectedStars = 0;
+  const picks = document.querySelectorAll('.star-pick');
+  picks.forEach(s => {
+    s.addEventListener('mouseenter', () => picks.forEach((p, i) => p.classList.toggle('active', i < parseInt(s.dataset.val))));
+    s.addEventListener('mouseleave', () => picks.forEach((p, i) => p.classList.toggle('active', i < selectedStars)));
+    s.addEventListener('click', () => { selectedStars = parseInt(s.dataset.val); picks.forEach((p, i) => p.classList.toggle('active', i < selectedStars)); });
+  });
+
+  async function submitReview() {
+    const name = document.getElementById('rev-name').value.trim();
+    const text = document.getElementById('rev-text').value.trim();
+    if (!name || !text || !selectedStars) { showToast('Please fill in your name, rating and review.', 'error'); return; }
+    const dish = document.getElementById('rev-dish').value.trim();
+    const btn = document.querySelector('button[onclick="submitReview()"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+    try {
+      await API.submitReview({ customerName: name, rating: selectedStars, reviewText: text, favouriteDish: dish });
+      showToast('Thank you! Your review has been submitted for approval.', 'success');
+      document.getElementById('rev-name').value = '';
+      document.getElementById('rev-text').value = '';
+      document.getElementById('rev-dish').value = '';
+      selectedStars = 0;
+      picks.forEach(p => p.classList.remove('active'));
+    } catch (err) {
+      showToast(err.message || 'Could not submit review. Please try again.', 'error');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = '⭐ Submit Review'; }
+    }
+  }
+</script>
+</body>
+</html>

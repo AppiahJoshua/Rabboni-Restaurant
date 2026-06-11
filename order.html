@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="paystack-key" content="pk_live_95ce8f95e414dd8c902284fc4ea8993cd71ce6b0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Online – Rabboni Restaurant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .order-layout { display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start; }
+    .order-steps { display: flex; gap: 0; margin-bottom: 40px; position: relative; }
+    .order-steps::before { content: ''; position: absolute; top: 20px; left: 20px; right: 20px; height: 1px; background: var(--border); z-index: 0; }
+    .step { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; position: relative; z-index: 1; }
+    .step-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--surface-2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700; transition: var(--transition); }
+    .step.active .step-circle { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .step.done .step-circle { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+    .step-label { font-size: .72rem; color: var(--text-muted); text-align: center; font-weight: 500; }
+    .step.active .step-label { color: var(--text); }
+    /* Panels */
+    .order-panel { display: none; }
+    .order-panel.active { display: block; }
+    /* Cart items */
+    .cart-item { display: flex; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .cart-item-emoji { font-size: 2rem; width: 44px; text-align: center; flex-shrink: 0; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
+    .cart-item-price { color: var(--gold); font-family: 'Playfair Display', serif; font-size: .95rem; }
+    .qty-control { display: flex; align-items: center; gap: 8px; }
+    .qty-btn { width: 30px; height: 30px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); font-size: 1.1rem; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; }
+    .qty-btn:hover { background: var(--primary); border-color: var(--primary); }
+    .qty-val { font-weight: 600; min-width: 20px; text-align: center; }
+    .cart-remove { color: var(--text-dim); font-size: 1rem; cursor: pointer; padding: 4px; transition: var(--transition); background: none; border: none; }
+    .cart-remove:hover { color: #F87878; }
+    /* Order summary sidebar */
+    .order-summary { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 24px; position: sticky; top: 90px; }
+    .summary-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 20px; }
+    .summary-row { display: flex; justify-content: space-between; font-size: .88rem; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .summary-row:last-of-type { border-bottom: none; }
+    .summary-row .label { color: var(--text-muted); }
+    .summary-total { display: flex; justify-content: space-between; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--border-strong); }
+    .summary-total .label { font-weight: 600; font-size: 1rem; }
+    .summary-total .amount { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.2rem; font-weight: 700; }
+    /* Payment methods */
+    .payment-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .payment-opt { background: var(--surface-2); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; text-align: center; transition: var(--transition); }
+    .payment-opt.selected { border-color: var(--gold); background: rgba(212,168,67,.08); }
+    .payment-opt .pay-icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .payment-opt .pay-name { font-size: .82rem; font-weight: 600; }
+    /* Success */
+    .success-screen { text-align: center; padding: 60px 20px; }
+    .success-icon { font-size: 4rem; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
+    .order-id { display: inline-block; background: rgba(212,168,67,.1); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 20px; font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.1rem; margin: 16px 0; }
+    /* Empty cart */
+    .empty-cart { text-align: center; padding: 60px 20px; }
+    .delivery-badge { display: flex; gap: 8px; align-items: center; padding: 10px 16px; background: rgba(72,166,95,.08); border: 1px solid rgba(72,166,95,.2); border-radius: var(--radius); margin-bottom: 20px; font-size: .85rem; }
+
+    @media(max-width:900px){ .order-layout { grid-template-columns: 1fr; } .order-summary { position: static; } }
+    @media(max-width:480px){ .payment-options { grid-template-columns: 1fr; } }
+  </style>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="nav-logo-icon">🍽️</div><div class="nav-logo-text">Rabboni <span>Restaurant</span></div></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+      <a href="order.html" class="active">Order Online</a><a href="reservations.html">Reservations</a>
+      <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+      <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a>
+      <a href="reservations.html" class="nav-cta">Book Table</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+  <a href="order.html" class="active">Order Online</a><a href="reservations.html">Reservations</a>
+  <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+  <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a><a href="loyalty.html">Loyalty</a>
+</div>
+
+<div class="page-content">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-breadcrumb"><a href="index.html">Home</a><span class="sep">›</span><span>Order Online</span></div>
+      <div class="section-label">Delivery & Pickup</div>
+      <h1 class="section-title">Order <span>Online</span></h1>
+      <p style="color:var(--text-muted);max-width:600px;margin-top:12px">Order from our full menu and get it delivered to your doorstep or ready for pickup.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <!-- Steps -->
+      <div class="order-steps" id="orderSteps">
+        <div class="step active" data-step="1"><div class="step-circle">1</div><div class="step-label">Your Cart</div></div>
+        <div class="step" data-step="2"><div class="step-circle">2</div><div class="step-label">Delivery Info</div></div>
+        <div class="step" data-step="3"><div class="step-circle">3</div><div class="step-label">Payment</div></div>
+        <div class="step" data-step="4"><div class="step-circle">4</div><div class="step-label">Confirmed</div></div>
+      </div>
+
+      <div class="order-layout">
+        <!-- Main panels -->
+        <div>
+          <!-- STEP 1: Cart -->
+          <div class="order-panel active" id="panel-1">
+            <h3 style="font-family:'Playfair Display',serif;margin-bottom:20px">Your Cart</h3>
+            <div id="cartItems"></div>
+            <div id="emptyCart" class="empty-cart" style="display:none">
+              <div style="font-size:3rem;margin-bottom:16px">🛒</div>
+              <h3 style="font-family:'Playfair Display',serif;margin-bottom:8px">Your cart is empty</h3>
+              <p style="color:var(--text-muted);margin-bottom:24px">Browse our menu and add some delicious items!</p>
+              <a href="menu.html" class="btn btn-primary">🍽️ Browse Menu</a>
+            </div>
+            <div id="cartActions" style="margin-top:24px;display:none">
+              <div class="delivery-badge">
+                <span>🚚</span><span>Free delivery available on selected packages. Standard delivery fee: <strong>GHS 10</strong></span>
+              </div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <a href="menu.html" class="btn btn-ghost btn-sm">+ Add More Items</a>
+                <button class="btn btn-primary" onclick="goToStep(2)">Continue to Delivery →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: Delivery Info -->
+          <div class="order-panel" id="panel-2">
+            <h3 style="font-family:'Playfair Display',serif;margin-bottom:20px">Delivery Information</h3>
+            <div class="tabs mb-24" style="margin-bottom:24px">
+              <div class="tab active" data-target="delivery-tab">🚚 Delivery</div>
+              <div class="tab" data-target="pickup-tab">🏃 Pickup</div>
+            </div>
+            <div id="delivery-tab">
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Full Name</label><input class="form-control" id="del-name" placeholder="Your full name"></div>
+                <div class="form-group"><label class="form-label">Phone Number</label><input class="form-control" id="del-phone" placeholder="05X XXX XXXX" type="tel"></div>
+              </div>
+              <div class="form-group"><label class="form-label">Delivery Address</label><textarea class="form-control" id="del-address" rows="3" placeholder="Street, neighbourhood, landmark..."></textarea></div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Delivery Time</label>
+                  <select class="form-control" id="del-time">
+                    <option>As soon as possible</option>
+                    <option>In 30 minutes</option>
+                    <option>In 1 hour</option>
+                    <option>Schedule specific time</option>
+                  </select>
+                </div>
+                <div class="form-group"><label class="form-label">Special Instructions</label><input class="form-control" id="del-notes" placeholder="Allergies, preferences..."></div>
+              </div>
+            </div>
+            <div id="pickup-tab" style="display:none">
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px">
+                <h4 style="margin-bottom:8px">📍 Pickup Location</h4>
+                <p style="color:var(--text-muted);font-size:.9rem">Opposite Techiman Community Centre<br>First Floor, Opportunity International Bank Building<br>Techiman, Bono East Region</p>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Name</label><input class="form-control" id="pick-name" placeholder="Your name"></div>
+                <div class="form-group"><label class="form-label">Phone</label><input class="form-control" id="pick-phone" placeholder="05X XXX XXXX" type="tel"></div>
+              </div>
+              <div class="form-group"><label class="form-label">Preferred Pickup Time</label>
+                <select class="form-control" id="pick-time">
+                  <option>In 20–30 minutes</option><option>In 45 minutes</option><option>In 1 hour</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+              <button class="btn btn-ghost" onclick="goToStep(1)">← Back</button>
+              <button class="btn btn-primary" onclick="goToStep(3)">Continue to Payment →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: Payment -->
+          <div class="order-panel" id="panel-3">
+            <h3 style="font-family:'Playfair Display',serif;margin-bottom:20px">Select Payment Method</h3>
+            <div class="form-group" style="margin-bottom:20px"><label class="form-label">Email (for payment receipt)</label><input class="form-control" id="pay-email" type="email" placeholder="your@email.com"></div>
+<div class="payment-options" id="paymentOptions">
+              <div class="payment-opt selected" data-pay="momo" onclick="selectPay(this)">
+                <div class="pay-icon">📱</div>
+                <div class="pay-name">Mobile Money</div>
+              </div>
+              <div class="payment-opt" data-pay="cash" onclick="selectPay(this)">
+                <div class="pay-icon">💵</div>
+                <div class="pay-name">Cash on Delivery</div>
+              </div>
+              <div class="payment-opt" data-pay="card" onclick="selectPay(this)">
+                <div class="pay-icon">💳</div>
+                <div class="pay-name">Bank Card</div>
+              </div>
+              <div class="payment-opt" data-pay="transfer" onclick="selectPay(this)">
+                <div class="pay-icon">🏦</div>
+                <div class="pay-name">Bank Transfer</div>
+              </div>
+            </div>
+            <!-- MoMo fields -->
+            <div id="momo-fields">
+              <div class="form-group"><label class="form-label">Mobile Money Number</label><input class="form-control" id="momo-number" placeholder="05X XXX XXXX" type="tel"></div>
+              <div class="form-group"><label class="form-label">Network</label>
+                <select class="form-control" id="momo-network">
+                  <option>MTN Mobile Money</option><option>Vodafone Cash</option><option>AirtelTigo Money</option>
+                </select>
+              </div>
+            </div>
+            <div id="cash-fields" style="display:none">
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;color:var(--text-muted);font-size:.9rem">
+                💵 Pay cash when your order is delivered or when you pick up. Please have exact change ready.
+              </div>
+            </div>
+            <div id="card-fields" style="display:none">
+              <div class="form-group"><label class="form-label">Card Number</label><input class="form-control" placeholder="XXXX XXXX XXXX XXXX"></div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Expiry</label><input class="form-control" placeholder="MM/YY"></div>
+                <div class="form-group"><label class="form-label">CVV</label><input class="form-control" placeholder="XXX"></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+              <button class="btn btn-ghost" onclick="goToStep(2)">← Back</button>
+              <button class="btn btn-gold" id="placeOrderBtn" onclick="placeOrder()">✅ Place Order</button>
+            </div>
+          </div>
+
+          <!-- STEP 4: Confirmation -->
+          <div class="order-panel" id="panel-4">
+            <div class="success-screen">
+              <div class="success-icon">🎉</div>
+              <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:8px">Order Confirmed!</h2>
+              <p style="color:var(--text-muted);margin-bottom:12px">Thank you for ordering from Rabboni Restaurant.</p>
+              <div class="order-id" id="orderIdDisplay">#RBN-0000</div>
+              <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:32px">Your order is being prepared. We'll call you on <strong id="confirmPhone">your number</strong> with updates.</p>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;text-align:left;margin-bottom:28px">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                  <span style="font-size:1.4rem">📍</span>
+                  <div><div style="font-weight:600;margin-bottom:2px">Estimated Time</div><div style="color:var(--text-muted);font-size:.88rem">30 – 45 minutes for delivery</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px">
+                  <span style="font-size:1.4rem">📞</span>
+                  <div><div style="font-weight:600;margin-bottom:2px">Need help?</div><div style="color:var(--text-muted);font-size:.88rem">Call us at 059 144 7201</div></div>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+                <a href="menu.html" class="btn btn-outline">Order Again</a>
+                <a href="index.html" class="btn btn-primary">Back to Home</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Summary -->
+        <div class="order-summary" id="orderSidebar">
+          <div class="summary-title">Order Summary</div>
+          <div id="summaryItems"></div>
+          <div class="summary-total">
+            <span class="label">Total</span>
+            <span class="amount" id="summaryTotal">GHS 0.00</span>
+          </div>
+          <div style="margin-top:16px;font-size:.8rem;color:var(--text-muted)">
+            🚚 Delivery: <strong>GHS 10</strong> (free on selected packages)
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="kente-divider"></div>
+  <div class="footer-top"><div class="container"><div class="footer-grid">
+    <div><div class="footer-brand-name">Rabboni <span>Restaurant</span></div><p class="footer-tagline">Exceptional Dining Experience in Techiman</p>
+      <div class="footer-social"><a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">🎵</a><a href="https://wa.me/233591447201" class="social-btn">💬</a></div></div>
+    <div><div class="footer-heading">Quick Links</div><div class="footer-links"><a href="menu.html">→ Menu</a><a href="order.html">→ Order Online</a><a href="contact.html">→ Contact</a></div></div>
+    <div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+233591447201">📞 059 144 7201</a><a href="contact.html">📍 Opp. Community Centre</a></div></div>
+    <div><div class="footer-heading">Hours</div><div class="footer-hours"><div class="hours-row"><span class="day">Mon – Sun</span><span class="time">6AM – 9PM</span></div></div></div>
+  </div></div></div>
+  <div class="footer-bottom"><div class="container"><div class="footer-bottom-inner"><span>© 2026 Rabboni Restaurant.</span><span>Techiman, Ghana 🇬🇭</span></div></div></div>
+</footer>
+
+<div class="floating-btns">
+  <a href="https://wa.me/233591447201" target="_blank" class="float-btn float-wa" data-label="WhatsApp Order">💬</a>
+  <a href="tel:+233591447201" class="float-btn float-call" data-label="Call Now">📞</a>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script src="js/order.js"></script>
+</body>
+</html>

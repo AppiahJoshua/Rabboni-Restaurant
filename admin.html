@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – Rabboni Restaurant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { background: var(--dark); }
+    /* Admin layout */
+    .admin-wrapper { display: flex; min-height: 100vh; padding-top: var(--nav-h); }
+    .admin-sidebar { width: 240px; background: var(--dark-2); border-right: 1px solid var(--border); position: fixed; top: var(--nav-h); bottom: 0; left: 0; overflow-y: auto; z-index: 100; transition: var(--transition); }
+    .admin-main { margin-left: 240px; flex: 1; padding: 32px; min-height: calc(100vh - var(--nav-h)); }
+    .sidebar-section { padding: 16px 16px 8px; font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); }
+    .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 11px 20px; font-size: .88rem; font-weight: 500; color: var(--text-muted); transition: var(--transition); cursor: pointer; border-left: 2px solid transparent; }
+    .sidebar-link:hover { color: var(--text); background: var(--surface); }
+    .sidebar-link.active { color: var(--gold); background: rgba(212,168,67,.06); border-left-color: var(--gold); }
+    .sidebar-link .s-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+    /* Panels */
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+    /* Stat cards */
+    .stat-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; transition: var(--transition); }
+    .stat-card:hover { border-color: var(--border-strong); }
+    .stat-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .stat-change { font-size: .75rem; font-weight: 600; }
+    .stat-change.up { color: #72C48F; }
+    .stat-change.down { color: #F87878; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; }
+    .stat-label { font-size: .78rem; color: var(--text-muted); margin-top: 3px; }
+    /* Table */
+    .admin-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table th { background: var(--surface-2); padding: 12px 16px; text-align: left; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+    .admin-table td { padding: 14px 16px; font-size: .88rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: var(--surface-2); }
+    /* Section header */
+    .admin-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .admin-section-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; }
+    /* Charts placeholder */
+    .chart-bar-group { display: flex; gap: 8px; align-items: flex-end; height: 160px; padding: 0 8px; }
+    .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .chart-bar { width: 100%; border-radius: 6px 6px 0 0; background: var(--primary); transition: height .6s ease; min-width: 20px; }
+    .chart-label { font-size: .68rem; color: var(--text-muted); }
+    .chart-val { font-size: .7rem; color: var(--gold); font-weight: 600; }
+    /* Toggle */
+    .toggle { position: relative; display: inline-flex; width: 44px; height: 24px; cursor: pointer; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--surface-3); border-radius: 12px; transition: var(--transition); }
+    .toggle input:checked + .toggle-slider { background: var(--primary); }
+    .toggle-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: var(--transition); }
+    .toggle input:checked + .toggle-slider::before { left: 23px; }
+    /* Menu item row editing */
+    .edit-btn { padding: 5px 12px; border-radius: 8px; font-size: .75rem; font-weight: 600; cursor: pointer; transition: var(--transition); border: 1px solid var(--border); background: var(--surface-2); color: var(--text-muted); }
+    .edit-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .del-btn { padding: 5px 12px; border-radius: 8px; font-size: .75rem; font-weight: 600; cursor: pointer; transition: var(--transition); border: 1px solid rgba(155,35,53,.3); background: rgba(155,35,53,.08); color: #F87878; }
+    .del-btn:hover { background: rgba(155,35,53,.2); }
+    /* Notification dot */
+    .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); display: inline-block; flex-shrink: 0; }
+    @media(max-width:1024px){ .stat-cards { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:768px){ .admin-sidebar { transform: translateX(-100%); }.admin-sidebar.open { transform: translateX(0); } .admin-main { margin-left: 0; padding: 20px 16px; } }
+  </style>
+</head>
+<body>
+<!-- Nav (admin version) -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="nav-logo-icon">🍽️</div><div class="nav-logo-text">Rabboni <span>Admin</span></div></a>
+    <div class="nav-links">
+      <a href="index.html">← View Site</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="font-size:.85rem;color:var(--text-muted)">Admin</div>
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem">A</div>
+    </div>
+  </div>
+</nav>
+
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div style="padding:20px 16px;border-bottom:1px solid var(--border)">
+      <div style="font-size:.78rem;color:var(--text-muted)">Logged in as</div>
+      <div style="font-weight:600;margin-top:2px">Administrator</div>
+    </div>
+    <div class="sidebar-section">Overview</div>
+    <div class="sidebar-link active" data-panel="dashboard" onclick="switchPanel(this)"><span class="s-icon">📊</span>Dashboard</div>
+    <div class="sidebar-section">Restaurant</div>
+    <div class="sidebar-link" data-panel="orders" onclick="switchPanel(this)"><span class="s-icon">🛒</span>Orders <span class="notif-dot" style="margin-left:auto"></span></div>
+    <div class="sidebar-link" data-panel="reservations" onclick="switchPanel(this)"><span class="s-icon">📅</span>Reservations <span class="notif-dot" style="margin-left:auto"></span></div>
+    <div class="sidebar-link" data-panel="menu" onclick="switchPanel(this)"><span class="s-icon">🍽️</span>Menu Management</div>
+    <div class="sidebar-link" data-panel="promotions" onclick="switchPanel(this)"><span class="s-icon">🎁</span>Promotions</div>
+    <div class="sidebar-section">Insights</div>
+    <div class="sidebar-link" data-panel="reviews" onclick="switchPanel(this)"><span class="s-icon">⭐</span>Reviews</div>
+    <div class="sidebar-link" data-panel="messages" onclick="switchPanel(this)"><span class="s-icon">📩</span>Messages</div>
+    <div class="sidebar-link" data-panel="analytics" onclick="switchPanel(this)"><span class="s-icon">📈</span>Analytics</div>
+    <div class="sidebar-link" data-panel="customers" onclick="switchPanel(this)"><span class="s-icon">👥</span>Customers</div>
+    <div class="sidebar-section">Settings</div>
+    <div class="sidebar-link" data-panel="settings" onclick="switchPanel(this)"><span class="s-icon">⚙️</span>Settings</div>
+    <div style="padding:16px;margin-top:auto;border-top:1px solid var(--border)">
+      <a href="index.html" class="btn btn-ghost btn-sm w-full" style="justify-content:center;width:100%">← Back to Site</a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="admin-main">
+
+    <!-- DASHBOARD -->
+    <div class="admin-panel active" id="panel-dashboard">
+      <div class="admin-section-header">
+        <div><div class="section-label">Today, June 2026</div><div class="admin-section-title">Dashboard Overview</div></div>
+        <div style="font-size:.85rem;color:var(--text-muted)">🟢 Restaurant is Open</div>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-card-top"><div class="stat-icon" style="background:rgba(155,35,53,.15)">🛒</div><span class="stat-change up">↑ 12%</span></div>
+          <div class="stat-num" id="stat-orders-today">—</div><div class="stat-label">Orders Today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-top"><div class="stat-icon" style="background:rgba(212,168,67,.12)">💰</div><span class="stat-change up">↑ 8%</span></div>
+          <div class="stat-num" id="stat-revenue-today">—</div><div class="stat-label">Revenue Today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-top"><div class="stat-icon" style="background:rgba(72,166,95,.12)">📅</div><span class="stat-change up">↑ 3</span></div>
+          <div class="stat-num" id="stat-reservations-today">—</div><div class="stat-label">Reservations Today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-top"><div class="stat-icon" style="background:rgba(193,122,58,.15)">⭐</div><span class="stat-change up">↑ 0.1</span></div>
+          <div class="stat-num" id="stat-avg-rating">—</div><div class="stat-label">Avg. Rating</div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid-2" style="margin-bottom:24px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px">
+          <div style="font-weight:600;margin-bottom:20px;font-size:.9rem">Weekly Revenue (GHS)</div>
+          <div class="chart-bar-group" id="weeklyChartBody">
+            <div class="chart-bar-wrap"><div class="chart-val">820</div><div class="chart-bar" style="height:55%"></div><div class="chart-label">Mon</div></div>
+            <div class="chart-bar-wrap"><div class="chart-val">1,120</div><div class="chart-bar" style="height:75%;background:var(--gold-muted)"></div><div class="chart-label">Tue</div></div>
+            <div class="chart-bar-wrap"><div class="chart-val">940</div><div class="chart-bar" style="height:63%"></div><div class="chart-label">Wed</div></div>
+            <div class="chart-bar-wrap"><div class="chart-val">1,400</div><div class="chart-bar" style="height:93%"></div><div class="chart-label">Thu</div></div>
+            <div class="chart-bar-wrap"><div class="chart-val">1,200</div><div class="chart-bar" style="height:80%"></div><div class="chart-label">Fri</div></div>
+            <div class="chart-bar-wrap"><div class="chart-val">1,840</div><div class="chart-bar" style="height:100%;background:var(--gold)"></div><div class="chart-label">Sat</div></div>
+            <div class="chart-bar-wrap"><div class="chart-val">—</div><div class="chart-bar" style="height:8%;background:var(--surface-3)"></div><div class="chart-label">Sun</div></div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px">
+          <div style="font-weight:600;margin-bottom:16px;font-size:.9rem">Popular Dishes</div>
+          <div id="topDishesBody" style="display:flex;flex-direction:column;gap:12px">
+            <div><div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:4px"><span>Jollof Rice + Chicken</span><span style="color:var(--gold)">38%</span></div><div style="height:6px;background:var(--surface-2);border-radius:3px"><div style="width:38%;height:100%;background:var(--gold);border-radius:3px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:4px"><span>Banku & Tilapia</span><span style="color:var(--gold)">24%</span></div><div style="height:6px;background:var(--surface-2);border-radius:3px"><div style="width:24%;height:100%;background:var(--primary);border-radius:3px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:4px"><span>Special Fried Rice</span><span style="color:var(--gold)">18%</span></div><div style="height:6px;background:var(--surface-2);border-radius:3px"><div style="width:18%;height:100%;background:var(--amber);border-radius:3px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:4px"><span>Chicken Pizza</span><span style="color:var(--gold)">12%</span></div><div style="height:6px;background:var(--surface-2);border-radius:3px"><div style="width:12%;height:100%;background:var(--gold-muted);border-radius:3px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:4px"><span>Other Items</span><span style="color:var(--gold)">8%</span></div><div style="height:6px;background:var(--surface-2);border-radius:3px"><div style="width:8%;height:100%;background:var(--surface-3);border-radius:3px"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders quick view -->
+      <div class="admin-table-wrap">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+          <div style="font-weight:600;font-size:.9rem">Recent Orders</div>
+          <button class="edit-btn" onclick="switchPanelById('orders')">View All →</button>
+        </div>
+        <table class="admin-table">
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Time</th></tr></thead>
+          <tbody id="recentOrdersBody">
+            <tr><td><span style="color:var(--gold);font-weight:600">#RBN-4721</span></td><td>Ama Koduah</td><td>Jollof Rice, Malt</td><td>GHS 57</td><td><span class="badge badge-green">✓ Delivered</span></td><td style="color:var(--text-muted)">2:14 PM</td></tr>
+            <tr><td><span style="color:var(--gold);font-weight:600">#RBN-4722</span></td><td>Kwame B.</td><td>Banku & Tilapia, 2× Fanta</td><td>GHS 75</td><td><span class="badge badge-gold">🔥 Preparing</span></td><td style="color:var(--text-muted)">2:32 PM</td></tr>
+            <tr><td><span style="color:var(--gold);font-weight:600">#RBN-4723</span></td><td>Michael A.</td><td>Special Fried Rice</td><td>GHS 60</td><td><span class="badge" style="background:rgba(72,166,95,.15);color:#72C48F;border:1px solid rgba(72,166,95,.3)">🚚 On the Way</span></td><td style="color:var(--text-muted)">2:45 PM</td></tr>
+            <tr><td><span style="color:var(--gold);font-weight:600">#RBN-4724</span></td><td>Efua S.</td><td>Full Breakfast, Coffee</td><td>GHS 60</td><td><span class="badge badge-red">⏳ Pending</span></td><td style="color:var(--text-muted)">2:58 PM</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="admin-panel" id="panel-orders">
+      <div class="admin-section-header">
+        <div class="admin-section-title">Manage Orders</div>
+        <div style="display:flex;gap:8px">
+          <select class="form-control" style="width:auto;padding:8px 12px;font-size:.82rem">
+            <option>All Orders</option><option>Pending</option><option>Preparing</option><option>On the Way</option><option>Delivered</option>
+          </select>
+        </div>
+      </div>
+      <div class="stat-cards" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card"><div class="stat-card-top"><div class="stat-icon" style="background:rgba(248,120,120,.15)">⏳</div></div><div class="stat-num" id="stat-pending">—</div><div class="stat-label">Pending</div></div>
+        <div class="stat-card"><div class="stat-card-top"><div class="stat-icon" style="background:rgba(212,168,67,.12)">🔥</div></div><div class="stat-num" id="stat-preparing">—</div><div class="stat-label">Preparing</div></div>
+        <div class="stat-card"><div class="stat-card-top"><div class="stat-icon" style="background:rgba(72,166,95,.12)">🚚</div></div><div class="stat-num" id="stat-onway">—</div><div class="stat-label">On the Way</div></div>
+        <div class="stat-card"><div class="stat-card-top"><div class="stat-icon" style="background:rgba(155,35,53,.12)">✓</div></div><div class="stat-num">11</div><div class="stat-label">Delivered Today</div></div>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Items</th><th>Total</th><th>Type</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="ordersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RESERVATIONS -->
+    <div class="admin-panel" id="panel-reservations">
+      <div class="admin-section-header">
+        <div class="admin-section-title">Manage Reservations</div>
+        <div style="display:flex;gap:8px">
+          <input type="date" class="form-control" style="width:auto;padding:8px 12px;font-size:.82rem">
+        </div>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Ref</th><th>Guest</th><th>Phone</th><th>Date</th><th>Time</th><th>Guests</th><th>Occasion</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="resTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MENU MANAGEMENT -->
+    <div class="admin-panel" id="panel-menu">
+      <div class="admin-section-header">
+        <div class="admin-section-title">Menu Management</div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('addItemModal')">+ Add New Item</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Item &amp; Photo</th><th>Category</th><th>Price (GHS)</th><th>Popular</th><th>Available</th><th>Actions</th></tr></thead>
+          <tbody id="menuAdminBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PROMOTIONS -->
+    <div class="admin-panel" id="panel-promotions">
+      <div class="admin-section-header">
+        <div class="admin-section-title">Promotions</div>
+        <button class="btn btn-primary btn-sm">+ Create Offer</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;gap:16px;align-items:center">
+          <div style="font-size:2rem">🐣</div>
+          <div style="flex:1"><div style="font-weight:600;margin-bottom:3px">Easter Monday Package</div><div style="font-size:.82rem;color:var(--text-muted)">Special set menu for Easter</div></div>
+          <span class="badge badge-green">Active</span>
+          <button class="edit-btn">Edit</button>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;gap:16px;align-items:center">
+          <div style="font-size:2rem">💑</div>
+          <div style="flex:1"><div style="font-weight:600;margin-bottom:3px">Couple's Package</div><div style="font-size:.82rem;color:var(--text-muted)">Romantic dining for two</div></div>
+          <span class="badge badge-green">Active</span>
+          <button class="edit-btn">Edit</button>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;gap:16px;align-items:center">
+          <div style="font-size:2rem">🌟</div>
+          <div style="flex:1"><div style="font-weight:600;margin-bottom:3px">Weekend Specials</div><div style="font-size:.82rem;color:var(--text-muted)">Every Saturday & Sunday</div></div>
+          <span class="badge badge-green">Active</span>
+          <button class="edit-btn">Edit</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- REVIEWS -->
+    <div class="admin-panel" id="panel-reviews">
+      <div class="admin-section-header">
+        <div class="admin-section-title">Customer Reviews</div>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Customer</th><th>Rating</th><th>Review</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="reviewsAdminBody"><tr><td colspan="5" style="text-align:center;padding:32px;color:var(--text-muted)">Loading reviews…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="admin-panel" id="panel-messages">
+      <div class="admin-section-header">
+        <div class="admin-section-title">Contact Messages</div>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Phone</th><th>Subject</th><th>Message</th><th>Status</th></tr></thead>
+          <tbody id="messagesBody"><tr><td colspan="5" style="text-align:center;padding:32px;color:var(--text-muted)">Loading messages…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="admin-panel" id="panel-analytics">
+      <div class="admin-section-title" style="margin-bottom:24px">Analytics</div>
+      <div class="stat-cards">
+        <div class="stat-card"><div class="stat-card-top"><div class="stat-icon" style="background:rgba(212,168,67,.12)">💰</div><span class="stat-change up">↑ 15%</span></div><div class="stat-num" id="ana-month-revenue">—</div><div class="stat-label">Monthly Revenue</div></div>
+        <div class="stat-card"><div class="stat-card-top"><div class="stat-icon" style="background:rgba(155,35,53,.12)">🛒</div><span class="stat-change up">↑ 8%</span></div><div class="stat-num" id="ana-month-orders">—</div><div class="stat-label">Orders This Month</div></div>
+        <div class="stat-card"><div class="stat-card-top"><div class="stat-icon" style="background:rgba(72,166,95,.12)">👥</div><span class="stat-change up">↑ 22</span></div><div class="stat-num" id="ana-customers">—</div><div class="stat-label">New Customers</div></div>
+        <div class="stat-card"><div class="stat-card-top"><div class="stat-icon" style="background:rgba(193,122,58,.12)">⭐</div><span class="stat-change up">↑ 0.2</span></div><div class="stat-num" id="ana-avg-rating">—</div><div class="stat-label">Avg Rating</div></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-top:0">
+        <div style="font-weight:600;margin-bottom:20px">Monthly Revenue Trend (GHS)</div>
+        <div class="chart-bar-group" style="height:200px">
+          <div class="chart-bar-wrap"><div class="chart-val">31k</div><div class="chart-bar" style="height:55%"></div><div class="chart-label">Jan</div></div>
+          <div class="chart-bar-wrap"><div class="chart-val">28k</div><div class="chart-bar" style="height:50%"></div><div class="chart-label">Feb</div></div>
+          <div class="chart-bar-wrap"><div class="chart-val">36k</div><div class="chart-bar" style="height:64%;background:var(--gold-muted)"></div><div class="chart-label">Mar</div></div>
+          <div class="chart-bar-wrap"><div class="chart-val">42k</div><div class="chart-bar" style="height:75%;background:var(--gold-muted)"></div><div class="chart-label">Apr</div></div>
+          <div class="chart-bar-wrap"><div class="chart-val">39k</div><div class="chart-bar" style="height:70%"></div><div class="chart-label">May</div></div>
+          <div class="chart-bar-wrap"><div class="chart-val">48k</div><div class="chart-bar" style="height:86%;background:var(--gold)"></div><div class="chart-label">Jun</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="admin-panel" id="panel-customers">
+      <div class="admin-section-title" style="margin-bottom:24px">Customer Management</div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Phone</th><th>Tier</th><th>Points</th><th>Orders</th><th>Joined</th></tr></thead>
+          <tbody>
+            <tr><td>Ama Koduah</td><td>059 144 xxxx</td><td><span class="badge badge-gold">👑 Gold</span></td><td style="color:var(--gold)">1,240</td><td>18</td><td style="color:var(--text-muted)">Jan 2025</td></tr>
+            <tr><td>Kwame Boateng</td><td>024 288 xxxx</td><td><span class="badge" style="background:rgba(200,214,224,.1);color:#C8D6E0;border:1px solid rgba(200,214,224,.2)">🥈 Silver</span></td><td style="color:var(--gold)">680</td><td>12</td><td style="color:var(--text-muted)">Mar 2025</td></tr>
+            <tr><td>Efua Sarpong</td><td>020 648 xxxx</td><td><span class="badge" style="background:rgba(196,147,106,.1);color:#C4936A;border:1px solid rgba(196,147,106,.2)">🥉 Bronze</span></td><td style="color:var(--gold)">240</td><td>5</td><td style="color:var(--text-muted)">Nov 2025</td></tr>
+            <tr><td>Michael Asante</td><td>055 xxx xxxx</td><td><span class="badge badge-gold">👑 Gold</span></td><td style="color:var(--gold)">2,100</td><td>34</td><td style="color:var(--text-muted)">Aug 2024</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="admin-panel" id="panel-settings">
+      <div class="admin-section-title" style="margin-bottom:24px">Settings</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px">
+          <h4 style="font-family:'Playfair Display',serif;margin-bottom:20px">Restaurant Status</h4>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:.9rem">Accept Online Orders</span><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:.9rem">Accept Reservations</span><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:.9rem">Delivery Available</span><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:.9rem">Weekend Live Music</span><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px">
+          <h4 style="font-family:'Playfair Display',serif;margin-bottom:20px">Delivery Settings</h4>
+          <div class="form-group"><label class="form-label">Standard Delivery Fee</label><input class="form-control" value="10" type="number"></div>
+          <div class="form-group"><label class="form-label">Free Delivery Minimum (GHS)</label><input class="form-control" value="100" type="number"></div>
+          <div class="form-group"><label class="form-label">Max Delivery Radius (km)</label><input class="form-control" value="5" type="number"></div>
+          <button class="btn btn-primary btn-sm">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Add Menu Item Modal -->
+<div class="modal-overlay" id="addItemModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 style="font-family:'Playfair Display',serif">Add Menu Item</h3>
+      <button class="modal-close" onclick="closeModal('addItemModal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Item Name</label><input class="form-control" id="new-name" placeholder="e.g. Grilled Catfish"></div>
+      <div class="form-group"><label class="form-label">Category</label>
+        <select class="form-control" id="new-cat">
+          <option value="breakfast">Breakfast</option><option value="rice">Rice Dishes</option>
+          <option value="local">Local Dishes</option><option value="salads">Salads</option>
+          <option value="chinese">Chinese</option><option value="pasta">Pasta & Noodles</option>
+          <option value="burgers">Burgers</option><option value="grills">Grills</option>
+          <option value="pizza">Pizza</option><option value="drinks">Drinks</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Price (GHS)</label><input class="form-control" id="new-price" type="number" placeholder="0.00"></div>
+      <div class="form-group"><label class="form-label">Emoji</label><input class="form-control" id="new-emoji" placeholder="🍽️"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="new-desc" rows="3" placeholder="Brief description..."></textarea></div>
+    <button class="btn btn-primary" onclick="addMenuItem()">Add to Menu</button>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promotions – Rabboni Restaurant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .promo-hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 48px; position: relative; overflow: hidden; transition: var(--transition); }
+    .promo-hero-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-gold); }
+    .promo-hero-card .bg-glow { position: absolute; top: -60%; right: -20%; width: 400px; height: 400px; border-radius: 50%; pointer-events: none; }
+    .promo-hero-card .big-emoji { position: absolute; right: 48px; top: 50%; transform: translateY(-50%); font-size: 6rem; opacity: .5; }
+    .promo-hero-card .promo-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(155,35,53,.15); border: 1px solid rgba(155,35,53,.3); padding: 6px 14px; border-radius: 20px; font-size: .75rem; font-weight: 700; color: #F87878; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 16px; }
+    .promo-includes { display: flex; flex-direction: column; gap: 8px; margin: 20px 0; }
+    .promo-include-item { display: flex; align-items: center; gap: 10px; font-size: .9rem; color: var(--text-muted); }
+    .promo-include-item .check { color: var(--gold); font-size: .8rem; }
+    .event-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; display: flex; gap: 20px; align-items: flex-start; transition: var(--transition); }
+    .event-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+    .event-date-box { background: var(--primary); border-radius: var(--radius); padding: 10px 16px; text-align: center; flex-shrink: 0; min-width: 60px; }
+    .event-date-box .day-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; line-height: 1; }
+    .event-date-box .month { font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .8; }
+    .event-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 6px; }
+    .event-meta { display: flex; gap: 12px; font-size: .8rem; color: var(--text-muted); margin-bottom: 8px; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="nav-logo-icon">🍽️</div><div class="nav-logo-text">Rabboni <span>Restaurant</span></div></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+      <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+      <a href="gallery.html">Gallery</a><a href="promotions.html" class="active">Promotions</a>
+      <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a>
+      <a href="reservations.html" class="nav-cta">Book Table</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="menu.html">Menu</a>
+  <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+  <a href="gallery.html">Gallery</a><a href="promotions.html" class="active">Promotions</a>
+  <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a><a href="loyalty.html">Loyalty</a>
+</div>
+
+<div class="page-content">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-breadcrumb"><a href="index.html">Home</a><span class="sep">›</span><span>Promotions</span></div>
+      <div class="section-label">Special Offers</div>
+      <h1 class="section-title">Promotions <span>&amp; Events</span></h1>
+      <p style="color:var(--text-muted);max-width:600px;margin-top:12px">Take advantage of our special packages and stay up to date with upcoming events at Rabboni.</p>
+    </div>
+  </div>
+
+  <!-- SPECIAL PACKAGES -->
+  <section>
+    <div class="container">
+      <div class="section-header animate-in">
+        <div class="section-label">Limited Offers</div>
+        <h2 class="section-title">Special <span>Packages</span></h2>
+        <div class="gold-divider"><div class="diamond"></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px">
+
+        <div class="promo-hero-card animate-in">
+          <div class="bg-glow" style="background:radial-gradient(circle,rgba(212,168,67,.1) 0%,transparent 70%)"></div>
+          <div class="big-emoji">🐣</div>
+          <div class="promo-badge">🔥 Limited Time</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:8px">Easter Monday Package</h2>
+          <p style="color:var(--text-muted);max-width:500px;margin-bottom:16px">Celebrate the season with our specially curated Easter feast — a hearty spread for the whole family to enjoy together with joy and thanksgiving.</p>
+          <div class="promo-includes">
+            <div class="promo-include-item"><span class="check">✦</span>Starter platter for the table</div>
+            <div class="promo-include-item"><span class="check">✦</span>Choice of main course per person</div>
+            <div class="promo-include-item"><span class="check">✦</span>Dessert & soft drinks included</div>
+            <div class="promo-include-item"><span class="check">✦</span>Special Easter décor setting</div>
+          </div>
+          <a href="reservations.html" class="btn btn-primary">Book for Easter →</a>
+        </div>
+
+        <div class="grid-2">
+          <div class="promo-hero-card animate-in">
+            <div class="bg-glow" style="background:radial-gradient(circle,rgba(155,35,53,.1) 0%,transparent 70%)"></div>
+            <div class="big-emoji" style="font-size:4rem;top:40%">💑</div>
+            <div class="promo-badge" style="color:var(--gold);background:rgba(212,168,67,.1);border-color:rgba(212,168,67,.3)">💛 Romance</div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:8px">Couple's Package</h3>
+            <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:16px">A romantic dining experience for two — candlelight, a curated set menu, and complimentary dessert.</p>
+            <div class="promo-includes">
+              <div class="promo-include-item"><span class="check">✦</span>Candlelight table setting</div>
+              <div class="promo-include-item"><span class="check">✦</span>2-course set menu for 2</div>
+              <div class="promo-include-item"><span class="check">✦</span>Complimentary dessert</div>
+              <div class="promo-include-item"><span class="check">✦</span>House wine or mocktail</div>
+            </div>
+            <a href="reservations.html" class="btn btn-gold btn-sm">Reserve Now</a>
+          </div>
+
+          <div class="promo-hero-card animate-in">
+            <div class="bg-glow" style="background:radial-gradient(circle,rgba(72,166,95,.08) 0%,transparent 70%)"></div>
+            <div class="big-emoji" style="font-size:4rem;top:40%">👨‍👩‍👧</div>
+            <div class="promo-badge" style="color:#72C48F;background:rgba(72,166,95,.1);border-color:rgba(72,166,95,.3)">🌿 Family</div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:8px">Family Package</h3>
+            <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:16px">Gather the whole family for a feast — generous portions, kids' options, and a warm family atmosphere.</p>
+            <div class="promo-includes">
+              <div class="promo-include-item"><span class="check">✦</span>Family-size sharing platters</div>
+              <div class="promo-include-item"><span class="check">✦</span>Kids eat free (under 12)</div>
+              <div class="promo-include-item"><span class="check">✦</span>Complimentary soft drinks</div>
+              <div class="promo-include-item"><span class="check">✦</span>Free parking guaranteed</div>
+            </div>
+            <a href="reservations.html" class="btn btn-ghost btn-sm">Book a Table</a>
+          </div>
+        </div>
+
+        <div class="promo-hero-card animate-in" style="background:linear-gradient(135deg,var(--surface) 0%,var(--surface-2) 100%)">
+          <div class="bg-glow" style="background:radial-gradient(circle,rgba(193,122,58,.12) 0%,transparent 70%)"></div>
+          <div class="big-emoji" style="font-size:5rem">🌟</div>
+          <div class="promo-badge" style="color:var(--gold);background:rgba(212,168,67,.1);border-color:rgba(212,168,67,.3)">📅 Every Weekend</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:8px">Weekend Specials</h3>
+          <p style="color:var(--text-muted);max-width:500px;margin-bottom:16px">Every Saturday and Sunday we bring special menu items, live music, and exclusive discounts available only for our weekend guests.</p>
+          <div style="display:flex;gap:24px;margin-bottom:20px;flex-wrap:wrap">
+            <div style="text-align:center"><div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold)">20%</div><div style="font-size:.78rem;color:var(--text-muted)">Discount on selected items</div></div>
+            <div style="text-align:center"><div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold)">Live</div><div style="font-size:.78rem;color:var(--text-muted)">Music performances</div></div>
+            <div style="text-align:center"><div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold)">Free</div><div style="font-size:.78rem;color:var(--text-muted)">Dessert with orders</div></div>
+          </div>
+          <a href="reservations.html" class="btn btn-gold">Plan Your Weekend →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPCOMING EVENTS -->
+  <section style="background:var(--dark-2)">
+    <div class="container">
+      <div class="section-header animate-in">
+        <div class="section-label">What's On</div>
+        <h2 class="section-title">Upcoming <span>Events</span></h2>
+        <div class="gold-divider"><div class="diamond"></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="event-card animate-in">
+          <div class="event-date-box"><div class="day-num">14</div><div class="month">Jun</div></div>
+          <div style="flex:1">
+            <div class="event-title">🎵 Live Music Night — Jazz & Afrobeats</div>
+            <div class="event-meta"><span>🕕 6:00 PM – 10:00 PM</span><span>📍 Main Hall</span><span>🎟️ Free Entry</span></div>
+            <p style="font-size:.85rem;color:var(--text-muted)">Join us for a soulful evening of live jazz blended with Afrobeats rhythms. Enjoy great music, great food, and an unforgettable atmosphere.</p>
+          </div>
+          <a href="reservations.html" class="btn btn-outline btn-sm" style="flex-shrink:0">Book Seat</a>
+        </div>
+        <div class="event-card animate-in">
+          <div class="event-date-box"><div class="day-num">21</div><div class="month">Jun</div></div>
+          <div style="flex:1">
+            <div class="event-title">👨‍👩‍👧 Family Fun Day</div>
+            <div class="event-meta"><span>🕐 1:00 PM – 6:00 PM</span><span>📍 Outdoor Terrace</span><span>🎟️ Family Package</span></div>
+            <p style="font-size:.85rem;color:var(--text-muted)">A day full of fun, food, and family bonding. Special activities for children, BBQ stations, and our exclusive Family Package deals.</p>
+          </div>
+          <a href="reservations.html" class="btn btn-outline btn-sm" style="flex-shrink:0">Book Seat</a>
+        </div>
+        <div class="event-card animate-in">
+          <div class="event-date-box"><div class="day-num">4</div><div class="month">Jul</div></div>
+          <div style="flex:1">
+            <div class="event-title">🎂 Birthday Bash Special</div>
+            <div class="event-meta"><span>🕕 5:00 PM – 9:00 PM</span><span>📍 Private Dining Room</span><span>🎟️ By Reservation</span></div>
+            <p style="font-size:.85rem;color:var(--text-muted)">Celebrating a special birthday? Host your party at Rabboni with our bespoke birthday packages, personalized cakes, and dedicated service.</p>
+          </div>
+          <a href="reservations.html" class="btn btn-outline btn-sm" style="flex-shrink:0">Book Seat</a>
+        </div>
+        <div class="event-card animate-in">
+          <div class="event-date-box"><div class="day-num">19</div><div class="month">Jul</div></div>
+          <div style="flex:1">
+            <div class="event-title">🎵 Saturday Night Live Music</div>
+            <div class="event-meta"><span>🕕 7:00 PM – 11:00 PM</span><span>📍 Main Stage</span><span>🎟️ Free Entry</span></div>
+            <p style="font-size:.85rem;color:var(--text-muted)">Our regular Saturday live music nights return with a special highlife performance. Dinner and drinks available throughout.</p>
+          </div>
+          <a href="reservations.html" class="btn btn-outline btn-sm" style="flex-shrink:0">Book Seat</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Birthday Packages -->
+  <section>
+    <div class="container">
+      <div class="section-header centered animate-in">
+        <div class="section-label">Celebrate With Us</div>
+        <h2 class="section-title">Birthday <span>Packages</span></h2>
+        <div class="gold-divider"><div class="diamond"></div></div>
+      </div>
+      <div class="grid-3">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px;text-align:center;transition:var(--transition)" class="animate-in card">
+          <div style="font-size:2.5rem;margin-bottom:16px">🎂</div>
+          <h4 style="font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:8px">Classic Birthday</h4>
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);margin-bottom:16px">GHS 250<span style="font-size:.9rem;color:var(--text-muted)">/person</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;font-size:.85rem;color:var(--text-muted)">
+            <div>✦ 2-course set menu</div><div>✦ Birthday cake included</div><div>✦ Decorations setup</div><div>✦ Group photo</div>
+          </div>
+          <a href="reservations.html" class="btn btn-ghost w-full" style="justify-content:center">Book Now</a>
+        </div>
+        <div style="background:var(--primary);border:1px solid var(--primary);border-radius:var(--radius-xl);padding:32px;text-align:center;transition:var(--transition);position:relative;overflow:hidden" class="animate-in">
+          <div style="position:absolute;top:-20px;right:-20px;background:var(--gold);color:var(--dark);padding:4px 20px;font-size:.7rem;font-weight:700;transform:rotate(45deg) translate(10px,-5px);letter-spacing:.1em">POPULAR</div>
+          <div style="font-size:2.5rem;margin-bottom:16px">🎉</div>
+          <h4 style="font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:8px">Premium Birthday</h4>
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);margin-bottom:16px">GHS 400<span style="font-size:.9rem;opacity:.8">/person</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;font-size:.85rem;opacity:.85">
+            <div>✦ 3-course set menu</div><div>✦ Custom birthday cake</div><div>✦ Premium decorations</div><div>✦ Live music serenade</div><div>✦ Complimentary drinks</div>
+          </div>
+          <a href="reservations.html" class="btn btn-gold w-full" style="justify-content:center">Book Now</a>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px;text-align:center;transition:var(--transition)" class="animate-in card">
+          <div style="font-size:2.5rem;margin-bottom:16px">👑</div>
+          <h4 style="font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:8px">Royal Birthday</h4>
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);margin-bottom:16px">GHS 600<span style="font-size:.9rem;color:var(--text-muted)">/person</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;font-size:.85rem;color:var(--text-muted)">
+            <div>✦ Full private dining room</div><div>✦ 4-course gourmet menu</div><div>✦ Full bar package</div><div>✦ Live band performance</div><div>✦ Professional photography</div>
+          </div>
+          <a href="reservations.html" class="btn btn-gold w-full" style="justify-content:center">Book Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="kente-divider"></div>
+  <div class="footer-top"><div class="container"><div class="footer-grid">
+    <div><div class="footer-brand-name">Rabboni <span>Restaurant</span></div><p class="footer-tagline">Exceptional Dining Experience in Techiman</p>
+      <div class="footer-social"><a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">🎵</a><a href="https://wa.me/233591447201" class="social-btn">💬</a></div></div>
+    <div><div class="footer-heading">Quick Links</div><div class="footer-links"><a href="index.html">→ Home</a><a href="menu.html">→ Menu</a><a href="reservations.html">→ Reservations</a><a href="contact.html">→ Contact</a></div></div>
+    <div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+233591447201">📞 059 144 7201</a><a href="contact.html">📍 Opp. Community Centre</a></div></div>
+    <div><div class="footer-heading">Hours</div><div class="footer-hours"><div class="hours-row"><span class="day">Mon – Sun</span><span class="time">6AM – 9PM</span></div></div></div>
+  </div></div></div>
+  <div class="footer-bottom"><div class="container"><div class="footer-bottom-inner"><span>© 2026 Rabboni Restaurant.</span><span>Techiman, Ghana 🇬🇭</span></div></div></div>
+</footer>
+
+<div class="floating-btns">
+  <a href="https://wa.me/233591447201" target="_blank" class="float-btn float-wa" data-label="WhatsApp Order">💬</a>
+  <a href="tel:+233591447201" class="float-btn float-call" data-label="Call Now">📞</a>
+  <a href="reservations.html" class="float-btn float-reserve" data-label="Book Table">📅</a>
+</div>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

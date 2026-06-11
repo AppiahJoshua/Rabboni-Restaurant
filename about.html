@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us – Rabboni Restaurant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .about-story { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .about-story-img { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; font-size: 6rem; position: relative; overflow: hidden; }
+    .about-story-img::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 70%, rgba(155,35,53,.2) 0%, transparent 60%); }
+    .about-story-badge { position: absolute; bottom: 24px; left: 24px; background: var(--surface-3); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 16px 20px; }
+    .about-story-badge .num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); }
+    .about-story-badge .label { font-size: .8rem; color: var(--text-muted); }
+    .values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .value-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px 24px; transition: var(--transition); }
+    .value-card:hover { border-color: var(--border-strong); transform: translateY(-4px); box-shadow: var(--shadow-gold); }
+    .value-icon { font-size: 2.2rem; margin-bottom: 16px; }
+    .value-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; margin-bottom: 10px; }
+    .value-text { font-size: .88rem; color: var(--text-muted); line-height: 1.7; }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 24px; }
+    .team-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; text-align: center; transition: var(--transition); }
+    .team-card:hover { border-color: var(--border-strong); transform: translateY(-4px); }
+    .team-avatar { width: 100%; aspect-ratio: 1; background: var(--surface-2); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+    .team-info { padding: 18px; }
+    .team-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; }
+    .team-role { font-size: .82rem; color: var(--gold); margin-top: 4px; }
+    .milestone-list { display: flex; flex-direction: column; gap: 0; }
+    .milestone { display: flex; gap: 24px; align-items: flex-start; position: relative; padding-bottom: 32px; }
+    .milestone:not(:last-child)::before { content: ''; position: absolute; left: 19px; top: 40px; bottom: 0; width: 1px; background: var(--border); }
+    .milestone-dot { width: 40px; height: 40px; border-radius: 50%; background: var(--surface-2); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
+    .milestone-year { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold); font-weight: 600; }
+    .milestone-text { font-size: .9rem; color: var(--text-muted); margin-top: 4px; line-height: 1.6; }
+    @media(max-width:768px) { .about-story { grid-template-columns: 1fr; } .values-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">🍽️</div>
+      <div class="nav-logo-text">Rabboni <span>Restaurant</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="about.html" class="active">About</a><a href="menu.html">Menu</a>
+      <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+      <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+      <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a>
+      <a href="reservations.html" class="nav-cta">Book Table</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">Home</a><a href="about.html" class="active">About</a><a href="menu.html">Menu</a>
+  <a href="order.html">Order Online</a><a href="reservations.html">Reservations</a>
+  <a href="gallery.html">Gallery</a><a href="promotions.html">Promotions</a>
+  <a href="reviews.html">Reviews</a><a href="contact.html">Contact</a><a href="loyalty.html">Loyalty</a>
+</div>
+
+<div class="page-content">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-breadcrumb">
+        <a href="index.html">Home</a><span class="sep">›</span><span>About Us</span>
+      </div>
+      <div class="section-label">Our Story</div>
+      <h1 class="section-title">About <span>Rabboni Restaurant</span></h1>
+      <p style="color:var(--text-muted);max-width:600px;margin-top:12px">
+        Rooted in the heart of Techiman, we've been serving authentic flavours and warm hospitality to our community since our doors first opened.
+      </p>
+    </div>
+  </div>
+
+  <!-- STORY -->
+  <section>
+    <div class="container">
+      <div class="about-story">
+        <div class="about-story-img animate-in">
+          🍽️
+          <div class="about-story-badge">
+            <div class="num">5+</div>
+            <div class="label">Years of Excellence</div>
+          </div>
+        </div>
+        <div class="animate-in">
+          <div class="section-label">Our Beginning</div>
+          <h2 class="section-title">A Restaurant <span>Born from Passion</span></h2>
+          <div class="gold-divider"><div class="diamond"></div></div>
+          <p style="color:var(--text-muted);line-height:1.8;margin-bottom:18px">
+            Rabboni Restaurant was founded with a simple but powerful vision — to create a space in Techiman where family, food, and community come together. Located opposite the Techiman Community Centre, we quickly became a beloved institution in the Bono East Region.
+          </p>
+          <p style="color:var(--text-muted);line-height:1.8;margin-bottom:28px">
+            Our name, <em style="color:var(--gold)">"Rabboni"</em> — meaning "my great teacher" — reflects our belief that food teaches us who we are. Every dish we serve carries the wisdom of traditional Ghanaian cooking, elevated with contemporary technique and genuine care.
+          </p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px">
+              <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold)">50+</div>
+              <div style="font-size:.82rem;color:var(--text-muted)">Dishes on the menu</div>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px">
+              <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold)">3.8★</div>
+              <div style="font-size:.82rem;color:var(--text-muted)">Customer rating</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION & VISION -->
+  <section style="background:var(--dark-2)">
+    <div class="container">
+      <div class="section-header centered animate-in">
+        <div class="section-label">Our Purpose</div>
+        <h2 class="section-title">Mission & <span>Vision</span></h2>
+        <div class="gold-divider"><div class="diamond"></div></div>
+      </div>
+      <div class="grid-2">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:40px" class="animate-in">
+          <div style="font-size:2.5rem;margin-bottom:20px">🎯</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:14px">Our Mission</h3>
+          <p style="color:var(--text-muted);line-height:1.8">
+            To provide every guest with an exceptional dining experience through quality food, warm service, and a welcoming environment that celebrates the richness of Ghanaian and continental cuisine.
+          </p>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:40px" class="animate-in">
+          <div style="font-size:2.5rem;margin-bottom:20px">🌟</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:14px">Our Vision</h3>
+          <p style="color:var(--text-muted);line-height:1.8">
+            To become the most preferred and celebrated restaurant in Techiman and the Bono East Region — a place synonymous with quality, community, and unforgettable dining memories.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section>
+    <div class="container">
+      <div class="section-header centered animate-in">
+        <div class="section-label">What We Stand For</div>
+        <h2 class="section-title">Our Core <span>Values</span></h2>
+        <div class="gold-divider"><div class="diamond"></div></div>
+      </div>
+      <div class="values-grid">
+        <div class="value-card animate-in">
+          <div class="value-icon">🌿</div>
+          <div class="value-title">Quality & Freshness</div>
+          <div class="value-text">We never compromise on ingredient quality. Every item is sourced fresh, every day, from trusted local suppliers who share our standards.</div>
+        </div>
+        <div class="value-card animate-in">
+          <div class="value-icon">❤️</div>
+          <div class="value-title">Hospitality</div>
+          <div class="value-text">We treat every guest as family. True Ghanaian warmth flows through every interaction — from the moment you arrive to the moment you leave.</div>
+        </div>
+        <div class="value-card animate-in">
+          <div class="value-icon">🤝</div>
+          <div class="value-title">Community</div>
+          <div class="value-text">We are proud to be part of Techiman's fabric. We support local farmers, employ locally, and give back to the community that sustains us.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MILESTONES -->
+  <section style="background:var(--dark-2)">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start">
+        <div class="animate-in">
+          <div class="section-label">Our Journey</div>
+          <h2 class="section-title">Key <span>Milestones</span></h2>
+          <div class="gold-divider"><div class="diamond"></div></div>
+          <p style="color:var(--text-muted);line-height:1.8">
+            From humble beginnings to becoming a celebrated name in Techiman's dining scene, every step has been shaped by our community's love and support.
+          </p>
+        </div>
+        <div class="milestone-list animate-in">
+          <div class="milestone">
+            <div class="milestone-dot">🌱</div>
+            <div><div class="milestone-year">2019</div><div class="milestone-text">Rabboni Restaurant opens its doors in Techiman, quickly gaining a loyal following for its authentic local cuisine.</div></div>
+          </div>
+          <div class="milestone">
+            <div class="milestone-dot">🏆</div>
+            <div><div class="milestone-year">2020</div><div class="milestone-text">Expanded menu to include continental and Chinese cuisine, serving a wider audience across the region.</div></div>
+          </div>
+          <div class="milestone">
+            <div class="milestone-dot">🚚</div>
+            <div><div class="milestone-year">2021</div><div class="milestone-text">Launched our food delivery service with free delivery on selected packages, reaching more customers at home.</div></div>
+          </div>
+          <div class="milestone">
+            <div class="milestone-dot">🎵</div>
+            <div><div class="milestone-year">2022</div><div class="milestone-text">Introduced Live Music Nights and special event packages — making Rabboni a full entertainment destination.</div></div>
+          </div>
+          <div class="milestone">
+            <div class="milestone-dot">⭐</div>
+            <div><div class="milestone-year">2024+</div><div class="milestone-text">Achieved a 3.8+ star rating with hundreds of happy customers. Growing stronger every day.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding:60px 0">
+    <div class="container">
+      <div style="text-align:center" class="animate-in">
+        <div class="section-label">Come Visit Us</div>
+        <h2 class="section-title mt-8">Experience It <span>Yourself</span></h2>
+        <p style="color:var(--text-muted);max-width:480px;margin:12px auto 32px">Come taste the story. We'd love to welcome you to the Rabboni family.</p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <a href="reservations.html" class="btn btn-primary btn-lg">📅 Book a Table</a>
+          <a href="menu.html" class="btn btn-outline btn-lg">🍽️ View Menu</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="kente-divider"></div>
+  <div class="footer-top"><div class="container"><div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Rabboni <span>Restaurant</span></div>
+      <p class="footer-tagline">Exceptional Dining Experience in Techiman</p>
+      <p style="font-size:.88rem;color:var(--text-muted);line-height:1.7">Where authentic African flavours meet warm hospitality.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a>
+        <a href="#" class="social-btn">🎵</a><a href="https://wa.me/233591447201" class="social-btn">💬</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Quick Links</div>
+      <div class="footer-links">
+        <a href="index.html">→ Home</a><a href="about.html">→ About Us</a>
+        <a href="menu.html">→ Menu</a><a href="order.html">→ Order Online</a>
+        <a href="gallery.html">→ Gallery</a><a href="contact.html">→ Contact</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Contact</div>
+      <div class="footer-links">
+        <a href="tel:+233591447201">📞 059 144 7201</a>
+        <a href="tel:+233242880601">📞 024 288 0601</a>
+        <a href="contact.html">📍 Opp. Community Centre</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Hours</div>
+      <div class="footer-hours">
+        <div class="hours-row"><span class="day">Mon – Sun</span><span class="time">6AM – 9PM</span></div>
+      </div>
+    </div>
+  </div></div></div>
+  <div class="footer-bottom"><div class="container"><div class="footer-bottom-inner">
+    <span>© 2026 Rabboni Restaurant. All rights reserved.</span>
+    <span>Techiman, Ghana 🇬🇭</span>
+  </div></div></div>
+</footer>
+
+<div class="floating-btns">
+  <a href="https://wa.me/233591447201" target="_blank" class="float-btn float-wa" data-label="WhatsApp Order">💬</a>
+  <a href="tel:+233591447201" class="float-btn float-call" data-label="Call Now">📞</a>
+  <a href="reservations.html" class="float-btn float-reserve" data-label="Book Table">📅</a>
+</div>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
