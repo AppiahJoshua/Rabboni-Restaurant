@@ -9,7 +9,7 @@ const morgan      = require('morgan');
 const path        = require('path');
 const rateLimit   = require('express-rate-limit');
 
-const { initDB } = require('./db/database');
+const { initDB } = require('./backend/database');
 
 // Routes
 const authRoutes    = require('./routes/auth');
@@ -68,9 +68,8 @@ app.use('/api/loyalty',      loyaltyRouter);
 app.use('/api/payments',     paymentsRouter);
 
 /* ── Admin Stats Endpoint ───────────────────────────────────── */
-const authMiddleware = require('./middleware/auth');
-const { getDB } = require('./db/database');
-
+const authMiddleware = require('./backend/middleware/auth');
+const { getDB } = require('./backend/database');
 app.get('/api/dashboard/stats', authMiddleware, (req, res) => {
   const db = getDB();
   const today = new Date().toISOString().split('T')[0];
